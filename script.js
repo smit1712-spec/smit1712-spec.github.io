@@ -1,70 +1,99 @@
 /* =========================================================
    SMIT // SEC-OS
-   BOOT SEQUENCE ENGINE
+   COMMAND CENTER ENGINE
 ========================================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    const progress = document.getElementById("progress");
-    const progressText = document.getElementById("progress-text");
-    const bootLog = document.getElementById("boot-log");
 
-    const accessMessage = document.getElementById("access-message");
-    const enterSystem = document.getElementById("enter-system");
-    const bootScreen = document.getElementById("boot-screen");
+    /* =====================================================
+       ELEMENTS
+    ===================================================== */
+
+    const bootScreen =
+        document.getElementById("boot-screen");
+
+    const progress =
+        document.getElementById("progress");
+
+    const progressText =
+        document.getElementById("progress-text");
+
+    const bootLog =
+        document.getElementById("boot-log");
+
+    const accessMessage =
+        document.getElementById("access-message");
+
+    const enterSystem =
+        document.getElementById("enter-system");
+
+    const clock =
+        document.getElementById("clock");
+
+    const securityFeed =
+        document.getElementById("security-feed");
+
+    const navItems =
+        document.querySelectorAll(".nav-item");
 
 
     /* =====================================================
-       SECURITY BOOT LOG
+       BOOT SEQUENCE
     ===================================================== */
 
     const bootMessages = [
+
         "Initializing security kernel...",
+
         "Loading identity module...",
-        "Loading threat monitoring system...",
+
         "Establishing encrypted environment...",
+
         "Loading operations database...",
+
         "Verifying security credentials...",
+
         "Initializing command center...",
+
         "Secure channel established."
+
     ];
 
 
-    /* =====================================================
-       VARIABLES
-    ===================================================== */
-
     let percentage = 0;
+
     let messageIndex = 0;
 
 
-    /* =====================================================
-       START BOOT
-    ===================================================== */
-
     const bootTimer = setInterval(() => {
 
-        percentage += Math.floor(Math.random() * 4) + 1;
+        percentage +=
+            Math.floor(Math.random() * 4) + 1;
+
 
         if (percentage >= 100) {
+
             percentage = 100;
+
         }
 
 
-        /* Update progress bar */
-
-        progress.style.width = percentage + "%";
-
-
-        /* Update percentage text */
-
-        progressText.textContent = percentage + "%";
+        progress.style.width =
+            percentage + "%";
 
 
-        /* Add terminal messages */
+        progressText.textContent =
+            percentage + "%";
+
 
         const nextMessage =
-            Math.floor((percentage / 100) * bootMessages.length);
+            Math.floor(
+                percentage /
+                100 *
+                bootMessages.length
+            );
+
 
         if (
             nextMessage > messageIndex &&
@@ -76,51 +105,44 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
             messageIndex++;
+
         }
 
-
-        /* Finish */
 
         if (percentage >= 100) {
 
             clearInterval(bootTimer);
 
             finishBoot();
+
         }
 
     }, 100);
 
 
-    /* =====================================================
-       ADD BOOT MESSAGE
-    ===================================================== */
-
     function addBootMessage(message) {
 
-        const line = document.createElement("div");
+        const line =
+            document.createElement("div");
 
-        line.innerHTML = `
-            <span>›</span>
-            ${message}
-        `;
+        line.innerHTML =
+            `<span>›</span>${message}`;
 
         bootLog.appendChild(line);
 
 
-        /* Keep only latest messages */
-
-        while (bootLog.children.length > 6) {
+        while (
+            bootLog.children.length > 7
+        ) {
 
             bootLog.removeChild(
                 bootLog.firstElementChild
             );
+
         }
+
     }
 
-
-    /* =====================================================
-       FINISH BOOT
-    ===================================================== */
 
     function finishBoot() {
 
@@ -129,50 +151,221 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
 
-        /* Show ACCESS GRANTED */
-
         setTimeout(() => {
 
             accessMessage.classList.add("show");
 
-        }, 500);
+        }, 400);
 
-
-        /* Show ENTER SYSTEM */
 
         setTimeout(() => {
 
             enterSystem.classList.add("show");
 
-        }, 1100);
+        }, 900);
+
     }
 
 
     /* =====================================================
-       ENTER SYSTEM
+       ENTER COMMAND CENTER
     ===================================================== */
 
-    enterSystem.addEventListener("click", () => {
+    enterSystem.addEventListener(
+        "click",
+        () => {
 
-        enterSystem.style.pointerEvents = "none";
+            bootScreen.classList.add("exit");
 
-        bootScreen.classList.add("exit");
+            setTimeout(() => {
+
+                bootScreen.style.display =
+                    "none";
+
+            }, 1100);
+
+        }
+    );
+
+
+    /* =====================================================
+       LIVE CLOCK
+    ===================================================== */
+
+    function updateClock() {
+
+        const now = new Date();
+
+        const hours =
+            String(now.getHours())
+                .padStart(2, "0");
+
+        const minutes =
+            String(now.getMinutes())
+                .padStart(2, "0");
+
+        const seconds =
+            String(now.getSeconds())
+                .padStart(2, "0");
+
+
+        clock.textContent =
+            `${hours}:${minutes}:${seconds}`;
+
+    }
+
+
+    updateClock();
+
+    setInterval(
+        updateClock,
+        1000
+    );
+
+
+    /* =====================================================
+       NAVIGATION
+    ===================================================== */
+
+    navItems.forEach(item => {
+
+        item.addEventListener(
+            "click",
+            () => {
+
+                navItems.forEach(
+                    nav =>
+                        nav.classList.remove(
+                            "active"
+                        )
+                );
+
+
+                item.classList.add(
+                    "active"
+                );
+
+
+                const target =
+                    document.getElementById(
+                        item.dataset.target
+                    );
+
+
+                if (target) {
+
+                    target.scrollIntoView({
+                        behavior: "smooth"
+                    });
+
+                }
+
+            }
+        );
 
     });
 
 
     /* =====================================================
-       CONSOLE
+       LIVE SECURITY FEED
+    ===================================================== */
+
+    const feedMessages = [
+
+        "Network node heartbeat received",
+
+        "Security profile synchronized",
+
+        "Operations module verified",
+
+        "Secure interface channel active",
+
+        "System telemetry updated",
+
+        "Portfolio environment stable",
+
+        "Identity verification successful",
+
+        "Command center monitoring active"
+
+    ];
+
+
+    function addFeedMessage() {
+
+        const message =
+            feedMessages[
+                Math.floor(
+                    Math.random() *
+                    feedMessages.length
+                )
+            ];
+
+
+        const now = new Date();
+
+        const time =
+            `${String(now.getHours()).padStart(2, "0")}:` +
+            `${String(now.getMinutes()).padStart(2, "0")}:` +
+            `${String(now.getSeconds()).padStart(2, "0")}`;
+
+
+        const item =
+            document.createElement("div");
+
+        item.className =
+            "feed-item";
+
+
+        item.innerHTML = `
+
+            <time>
+                ${time}
+            </time>
+
+            <span class="feed-dot"></span>
+
+            <p>
+                ${message}
+            </p>
+
+        `;
+
+
+        securityFeed.prepend(item);
+
+
+        while (
+            securityFeed.children.length > 7
+        ) {
+
+            securityFeed.removeChild(
+                securityFeed.lastElementChild
+            );
+
+        }
+
+    }
+
+
+    setInterval(
+        addFeedMessage,
+        3500
+    );
+
+
+    /* =====================================================
+       CONSOLE IDENTITY
     ===================================================== */
 
     console.log(
         "%cSMIT // SEC-OS",
-        "color:#00ff88;font-size:20px;font-weight:bold;"
+        "color:#00ff95;font-size:20px;font-weight:bold;"
     );
 
     console.log(
-        "%cSecurity operating environment initialized.",
-        "color:#00e5ff;"
+        "%cSecurity Operations Environment initialized.",
+        "color:#00d9ff;"
     );
 
 });
