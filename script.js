@@ -209,126 +209,138 @@ typeTerminal();
 
 
 /* =====================================================
-   CUSTOM CURSOR
+   CUSTOM CURSOR // ADVANCED
 ===================================================== */
 
-const cursorDot =
-    document.querySelector(".cursor-dot");
+const cursorDot = document.querySelector(".cursor-dot");
+const cursorRing = document.querySelector(".cursor-ring");
 
-const cursorRing =
-    document.querySelector(".cursor-ring");
+const trail1 = document.querySelector(".trail-1");
+const trail2 = document.querySelector(".trail-2");
+const trail3 = document.querySelector(".trail-3");
 
-const trail1 =
-    document.querySelector(".trail-1");
+let mouseX = window.innerWidth / 2;
+let mouseY = window.innerHeight / 2;
 
-const trail2 =
-    document.querySelector(".trail-2");
+let ringX = mouseX;
+let ringY = mouseY;
 
-const trail3 =
-    document.querySelector(".trail-3");
+let trail1X = mouseX;
+let trail1Y = mouseY;
+
+let trail2X = mouseX;
+let trail2Y = mouseY;
+
+let trail3X = mouseX;
+let trail3Y = mouseY;
 
 
-let mouseX = 0;
-let mouseY = 0;
-
-let ringX = 0;
-let ringY = 0;
-
-let trail1X = 0;
-let trail1Y = 0;
-
-let trail2X = 0;
-let trail2Y = 0;
-
-let trail3X = 0;
-let trail3Y = 0;
-
+/* =========================================
+   MOUSE TRACKING
+========================================= */
 
 document.addEventListener("mousemove", (event) => {
 
     mouseX = event.clientX;
     mouseY = event.clientY;
 
-    cursorDot.style.left = mouseX + "px";
-    cursorDot.style.top = mouseY + "px";
+    if (cursorDot) {
+        cursorDot.style.left = mouseX + "px";
+        cursorDot.style.top = mouseY + "px";
+    }
 
 });
 
 
+/* =========================================
+   SMOOTH CURSOR ANIMATION
+========================================= */
+
 function animateCursor() {
 
-    ringX += (mouseX - ringX) * 0.15;
-    ringY += (mouseY - ringY) * 0.15;
+    ringX += (mouseX - ringX) * 0.14;
+    ringY += (mouseY - ringY) * 0.14;
 
-    trail1X += (mouseX - trail1X) * 0.10;
-    trail1Y += (mouseY - trail1Y) * 0.10;
+    trail1X += (mouseX - trail1X) * 0.11;
+    trail1Y += (mouseY - trail1Y) * 0.11;
 
-    trail2X += (mouseX - trail2X) * 0.06;
-    trail2Y += (mouseY - trail2Y) * 0.06;
+    trail2X += (mouseX - trail2X) * 0.07;
+    trail2Y += (mouseY - trail2Y) * 0.07;
 
-    trail3X += (mouseX - trail3X) * 0.03;
-    trail3Y += (mouseY - trail3Y) * 0.03;
-
-
-    cursorRing.style.left = ringX + "px";
-    cursorRing.style.top = ringY + "px";
+    trail3X += (mouseX - trail3X) * 0.04;
+    trail3Y += (mouseY - trail3Y) * 0.04;
 
 
-    trail1.style.left = trail1X + "px";
-    trail1.style.top = trail1Y + "px";
+    if (cursorRing) {
+        cursorRing.style.left = ringX + "px";
+        cursorRing.style.top = ringY + "px";
+    }
 
+    if (trail1) {
+        trail1.style.left = trail1X + "px";
+        trail1.style.top = trail1Y + "px";
+    }
 
-    trail2.style.left = trail2X + "px";
-    trail2.style.top = trail2Y + "px";
+    if (trail2) {
+        trail2.style.left = trail2X + "px";
+        trail2.style.top = trail2Y + "px";
+    }
 
-
-    trail3.style.left = trail3X + "px";
-    trail3.style.top = trail3Y + "px";
-
+    if (trail3) {
+        trail3.style.left = trail3X + "px";
+        trail3.style.top = trail3Y + "px";
+    }
 
     requestAnimationFrame(animateCursor);
-
 }
-
 
 animateCursor();
 
 
-/* =====================================================
-   CURSOR HOVER EFFECT
-===================================================== */
+/* =========================================
+   INTERACTIVE HOVER
+========================================= */
 
-const interactiveElements =
-    document.querySelectorAll(
-        "a, .magnetic, .operation-card, .tool"
-    );
-
+const interactiveElements = document.querySelectorAll(
+    "a, button, .magnetic, .operation-card, .tool, .arsenal-category"
+);
 
 interactiveElements.forEach((element) => {
 
     element.addEventListener("mouseenter", () => {
 
-        cursorRing.classList.add("hover");
+        if (cursorRing) {
+            cursorRing.classList.add("hover");
+        }
+
+        document.body.classList.add("cursor-active");
 
     });
 
-
     element.addEventListener("mouseleave", () => {
 
-        cursorRing.classList.remove("hover");
+        if (cursorRing) {
+            cursorRing.classList.remove("hover");
+        }
 
-        element.style.transform = "";
+        document.body.classList.remove("cursor-active");
 
     });
 
 });
 
 
-/* =====================================================
-   CLICK RIPPLE
-===================================================== */
+/* =========================================
+   CLICK EFFECT
+========================================= */
 
 document.addEventListener("mousedown", () => {
+
+    if (!cursorRing) return;
+
+    cursorRing.classList.remove("click");
+
+    void cursorRing.offsetWidth;
 
     cursorRing.classList.add("click");
 
@@ -339,27 +351,27 @@ document.addEventListener("mouseup", () => {
 
     setTimeout(() => {
 
-        cursorRing.classList.remove("click");
+        if (cursorRing) {
+            cursorRing.classList.remove("click");
+        }
 
-    }, 100);
+    }, 350);
 
 });
 
 
-/* =====================================================
-   MAGNETIC ELEMENTS
-===================================================== */
+/* =========================================
+   MAGNETIC BUTTONS
+========================================= */
 
 const magneticElements =
     document.querySelectorAll(".magnetic");
-
 
 magneticElements.forEach((element) => {
 
     element.addEventListener("mousemove", (event) => {
 
-        const rect =
-            element.getBoundingClientRect();
+        const rect = element.getBoundingClientRect();
 
         const x =
             event.clientX -
@@ -369,12 +381,10 @@ magneticElements.forEach((element) => {
             event.clientY -
             (rect.top + rect.height / 2);
 
-
         element.style.transform =
             `translate(${x * 0.12}px, ${y * 0.12}px)`;
 
     });
-
 
     element.addEventListener("mouseleave", () => {
 
