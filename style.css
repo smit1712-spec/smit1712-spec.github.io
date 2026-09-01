@@ -1920,3 +1920,20 @@ body.cursor-active .cursor-dot {
     }
 
 }
+
+/* =========================================
+   LIVE DASHBOARD PARALLAX
+========================================= */
+
+.security-panel {
+    transition:
+        transform 0.15s ease-out,
+        box-shadow 0.3s ease;
+
+    transform-style: preserve-3d;
+}
+
+.hero-content {
+    transition:
+        transform 0.2s ease-out;
+}
