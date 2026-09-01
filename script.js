@@ -509,3 +509,70 @@ console.log(
     "%c If you're reading this, you probably like looking under the hood.",
     "color:#718079;font-size:12px;"
 );
+
+/* =====================================================
+   LIVE DASHBOARD // MOUSE PARALLAX
+===================================================== */
+
+const hero = document.querySelector(".hero");
+const securityPanel = document.querySelector(".security-panel");
+const heroContent = document.querySelector(".hero-content");
+
+if (hero) {
+
+    hero.addEventListener("mousemove", (event) => {
+
+        const rect = hero.getBoundingClientRect();
+
+        const x =
+            (event.clientX - rect.left) / rect.width - 0.5;
+
+        const y =
+            (event.clientY - rect.top) / rect.height - 0.5;
+
+
+        /* Security panel */
+
+        if (securityPanel) {
+
+            securityPanel.style.transform =
+                `perspective(900px)
+                 rotateY(${x * 5}deg)
+                 rotateX(${y * -5}deg)
+                 translate(${x * 10}px, ${y * 10}px)`;
+
+        }
+
+
+        /* Hero content */
+
+        if (heroContent) {
+
+            heroContent.style.transform =
+                `translate(${x * -5}px, ${y * -5}px)`;
+
+        }
+
+    });
+
+
+    hero.addEventListener("mouseleave", () => {
+
+        if (securityPanel) {
+
+            securityPanel.style.transform =
+                "perspective(900px) rotateY(0deg) rotateX(0deg) translate(0, 0)";
+
+        }
+
+
+        if (heroContent) {
+
+            heroContent.style.transform =
+                "translate(0, 0)";
+
+        }
+
+    });
+
+}
