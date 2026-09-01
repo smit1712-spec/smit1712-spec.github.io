@@ -2,644 +2,247 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
 
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0">
 
-    <title>SMIT // SEC-OS</title>
-
     <meta name="description"
-        content="Smit Borkhetaria — Cybersecurity Portfolio">
+        content="Smit Borkhetaria | Cybersecurity Portfolio">
 
-    <link rel="stylesheet"
-        href="style.css">
+    <title>SMIT // SECURITY OPERATIONS</title>
 
+    <link rel="stylesheet" href="style.css">
 </head>
-
 
 <body>
 
+    <!-- =========================================
+         CURSOR
+    ========================================== -->
 
-<!-- =====================================================
-     BOOT SCREEN
-===================================================== -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-ring"></div>
 
-<div id="boot-screen">
+    <div class="cursor-trail trail-1"></div>
+    <div class="cursor-trail trail-2"></div>
+    <div class="cursor-trail trail-3"></div>
 
-    <div class="boot-top">
 
-        <span>SMIT // SEC-OS</span>
+    <!-- =========================================
+         BOOT SCREEN
+    ========================================== -->
 
-        <span>
-            <i class="status-dot"></i>
-            SECURE
-        </span>
+    <div id="boot-screen">
+
+        <div class="boot-top">
+            <span>SMIT // SEC-OS</span>
+            <span>SECURE CHANNEL</span>
+        </div>
+
+        <div class="boot-center">
+
+            <div class="boot-label">
+                SECURITY OPERATING ENVIRONMENT
+            </div>
+
+            <h1>
+                INITIALIZING
+                <span>SECURITY OS</span>
+            </h1>
+
+            <div class="boot-progress">
+
+                <div class="progress-bar">
+                    <div id="progress-fill"></div>
+                </div>
+
+                <div class="progress-info">
+                    <span id="progress-number">0%</span>
+                    <span>BOOT SEQUENCE</span>
+                </div>
+
+            </div>
+
+            <div class="boot-terminal">
+
+                <div id="boot-log">
+                    > Initializing kernel...
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="boot-footer">
+            <span>SECURITY LEVEL: ALPHA</span>
+            <span>SYSTEM ID: SMIT-SEC-01</span>
+        </div>
 
     </div>
 
 
-    <div class="boot-content">
+    <!-- =========================================
+         MAIN APPLICATION
+    ========================================== -->
 
-        <div class="boot-label">
-            SECURITY OPERATING ENVIRONMENT
-        </div>
-
-        <h1>
-            INITIALIZING
-            <span>SECURITY OS</span>
-        </h1>
+    <div id="app">
 
 
-        <div class="boot-progress">
+        <!-- =====================================
+             NAVIGATION
+        ====================================== -->
 
-            <div
-                id="progress"
-                class="boot-progress-fill">
+        <header class="navbar">
+
+            <a href="#home" class="brand magnetic">
+                <span class="prompt">>_</span>
+                SMIT<span class="green">//</span>SEC
+            </a>
+
+            <nav>
+
+                <a href="#home" class="nav-link magnetic active">
+                    <span>01</span> HOME
+                </a>
+
+                <a href="#about" class="nav-link magnetic">
+                    <span>02</span> ABOUT
+                </a>
+
+                <a href="#operations" class="nav-link magnetic">
+                    <span>03</span> OPERATIONS
+                </a>
+
+                <a href="#arsenal" class="nav-link magnetic">
+                    <span>04</span> ARSENAL
+                </a>
+
+                <a href="#contact" class="nav-link magnetic">
+                    <span>05</span> CONTACT
+                </a>
+
+            </nav>
+
+            <div class="system-status">
+                <span class="status-pulse"></span>
+                <span id="clock">00:00:00</span>
+                <span class="separator">|</span>
+                SECURE
             </div>
 
-        </div>
+        </header>
 
 
-        <div class="boot-progress-info">
+        <!-- =====================================
+             HERO
+        ====================================== -->
 
-            <span id="progress-text">0%</span>
+        <main>
 
-            <span>
-                BOOT SEQUENCE
-            </span>
+            <section id="home" class="hero">
 
-        </div>
+                <div class="grid-background"></div>
 
+                <div class="scan-line"></div>
 
-        <div id="boot-log"
-             class="boot-log">
+                <div class="hero-content">
 
-            <div>
-                <span>›</span>
-                Initializing kernel...
-            </div>
+                    <div class="terminal-intro">
 
-        </div>
-
-
-        <div id="access-message"
-             class="access-message">
-
-            ACCESS GRANTED
-
-        </div>
-
-
-        <button id="enter-system"
-                class="enter-system">
-
-            ENTER SECURITY OPERATIONS
-
-            <span>→</span>
-
-        </button>
-
-    </div>
-
-
-    <div class="boot-footer">
-
-        <span>
-            SECURITY LEVEL: ALPHA
-        </span>
-
-        <span>
-            SYSTEM ID: SMIT-SEC-01
-        </span>
-
-    </div>
-
-</div>
-
-
-
-<!-- =====================================================
-     MAIN SEC-OS INTERFACE
-===================================================== -->
-
-<div id="app"
-     class="app">
-
-
-    <!-- =================================================
-         TOP BAR
-    ================================================== -->
-
-    <header class="topbar">
-
-
-        <div class="brand">
-
-            <div class="brand-mark">
-                S
-            </div>
-
-            <div>
-
-                <div class="brand-name">
-                    SMIT // SEC-OS
-                </div>
-
-                <div class="brand-sub">
-                    SECURITY OPERATIONS ENVIRONMENT
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="topbar-right">
-
-
-            <div class="clock">
-
-                <span id="clock">
-                    00:00:00
-                </span>
-
-                <small>
-                    IST
-                </small>
-
-            </div>
-
-
-            <div class="system-online">
-
-                <span class="live-dot"></span>
-
-                SYSTEM ONLINE
-
-            </div>
-
-        </div>
-
-    </header>
-
-
-
-    <!-- =================================================
-         SIDEBAR
-    ================================================== -->
-
-    <aside class="sidebar">
-
-
-        <div class="sidebar-label">
-            COMMAND CENTER
-        </div>
-
-
-        <nav>
-
-
-            <button class="nav-item active"
-                    data-target="overview">
-
-                <span class="nav-number">
-                    00
-                </span>
-
-                <span>
-                    OVERVIEW
-                </span>
-
-            </button>
-
-
-            <button class="nav-item"
-                    data-target="profile">
-
-                <span class="nav-number">
-                    01
-                </span>
-
-                <span>
-                    PROFILE
-                </span>
-
-            </button>
-
-
-            <button class="nav-item"
-                    data-target="operations">
-
-                <span class="nav-number">
-                    02
-                </span>
-
-                <span>
-                    OPERATIONS
-                </span>
-
-            </button>
-
-
-            <button class="nav-item"
-                    data-target="arsenal">
-
-                <span class="nav-number">
-                    03
-                </span>
-
-                <span>
-                    ARSENAL
-                </span>
-
-            </button>
-
-
-            <button class="nav-item"
-                    data-target="credentials">
-
-                <span class="nav-number">
-                    04
-                </span>
-
-                <span>
-                    CREDENTIALS
-                </span>
-
-            </button>
-
-
-            <button class="nav-item"
-                    data-target="intel">
-
-                <span class="nav-number">
-                    05
-                </span>
-
-                <span>
-                    INTELLIGENCE
-                </span>
-
-            </button>
-
-
-            <button class="nav-item"
-                    data-target="contact">
-
-                <span class="nav-number">
-                    06
-                </span>
-
-                <span>
-                    CONTACT
-                </span>
-
-            </button>
-
-
-        </nav>
-
-
-        <div class="sidebar-bottom">
-
-            <div>
-                CONNECTION
-            </div>
-
-            <strong>
-                ENCRYPTED
-            </strong>
-
-            <div class="connection-line">
-                <span></span>
-            </div>
-
-            <small>
-                SECURE CHANNEL
-            </small>
-
-        </div>
-
-    </aside>
-
-
-
-    <!-- =================================================
-         MAIN CONTENT
-    ================================================== -->
-
-    <main class="main-content">
-
-
-        <!-- =============================================
-             OVERVIEW
-        ============================================== -->
-
-        <section id="overview"
-                 class="dashboard-section">
-
-
-            <div class="section-heading">
-
-                <div>
-
-                    <div class="eyebrow">
-                        00 // COMMAND CENTER
-                    </div>
-
-                    <h1>
-                        SECURITY
-                        <span>OPERATIONS</span>
-                    </h1>
-
-                </div>
-
-
-                <div class="session">
-
-                    SESSION
-                    <strong id="session-id">
-                        SEC-7F91
-                    </strong>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- STATUS CARDS -->
-
-            <div class="status-grid">
-
-
-                <div class="status-card">
-
-                    <div class="card-top">
-                        SYSTEM STATUS
-                        <span>01</span>
-                    </div>
-
-                    <div class="card-value online-text">
-                        ONLINE
-                    </div>
-
-                    <div class="card-footer">
-                        CORE SYSTEMS OPERATIONAL
-                    </div>
-
-                </div>
-
-
-                <div class="status-card">
-
-                    <div class="card-top">
-                        SECURITY PROFILE
-                        <span>02</span>
-                    </div>
-
-                    <div class="card-value">
-                        ACTIVE
-                    </div>
-
-                    <div class="card-footer">
-                        IDENTITY VERIFIED
-                    </div>
-
-                </div>
-
-
-                <div class="status-card">
-
-                    <div class="card-top">
-                        OPERATIONS
-                        <span>03</span>
-                    </div>
-
-                    <div class="card-value"
-                         id="operation-count">
-                        00
-                    </div>
-
-                    <div class="card-footer">
-                        PROJECT MODULES
-                    </div>
-
-                </div>
-
-
-                <div class="status-card">
-
-                    <div class="card-top">
-                        THREAT LEVEL
-                        <span>04</span>
-                    </div>
-
-                    <div class="card-value online-text">
-                        LOW
-                    </div>
-
-                    <div class="card-footer">
-                        PORTFOLIO ENVIRONMENT
-                    </div>
-
-                </div>
-
-
-            </div>
-
-
-
-            <!-- NETWORK + FEED -->
-
-            <div class="command-grid">
-
-
-                <!-- NETWORK -->
-
-                <div class="network-panel">
-
-                    <div class="panel-title">
-
-                        <span>
-                            LIVE NETWORK
+                        <span class="terminal-user">
+                            smit@sec-ops:~$
                         </span>
 
-                        <span class="panel-status">
-                            ● ACTIVE
-                        </span>
+                        <span id="typing-text"></span>
+
+                        <span class="terminal-cursor">_</span>
 
                     </div>
 
 
-                    <div class="network-map">
+                    <div class="hero-layout">
 
 
-                        <div class="network-core">
+                        <!-- PROFILE -->
 
-                            SEC
-                            <small>CORE</small>
+                        <div class="profile-area">
+
+                            <div class="profile-frame">
+
+                                <div class="frame-corner top-left"></div>
+                                <div class="frame-corner top-right"></div>
+                                <div class="frame-corner bottom-left"></div>
+                                <div class="frame-corner bottom-right"></div>
+
+                                <!-- Replace this later with your image -->
+                                <div class="profile-placeholder">
+
+                                    <div class="profile-initial">
+                                        S
+                                    </div>
+
+                                    <div class="profile-scan"></div>
+
+                                </div>
+
+                                <div class="online-badge">
+                                    <span></span>
+                                    ONLINE
+                                </div>
+
+                            </div>
+
+                            <div class="profile-id">
+                                ID // SMIT-SEC-01
+                            </div>
 
                         </div>
 
 
-                        <div class="node node-1">
-                            <span></span>
-                            <label>VAPT</label>
-                        </div>
+                        <!-- INTRO -->
 
+                        <div class="hero-text">
 
-                        <div class="node node-2">
-                            <span></span>
-                            <label>SOC</label>
-                        </div>
+                            <div class="classification">
+                                CYBERSECURITY // PROFESSIONAL PROFILE
+                            </div>
 
+                            <h1>
+                                HELLO, I'M
+                                <span>SMIT BORKHETARIA</span>
+                            </h1>
 
-                        <div class="node node-3">
-                            <span></span>
-                            <label>WEB</label>
-                        </div>
-
-
-                        <div class="node node-4">
-                            <span></span>
-                            <label>NET</label>
-                        </div>
-
-
-                        <div class="node node-5">
-                            <span></span>
-                            <label>LAB</label>
-                        </div>
-
-
-                        <svg
-                            class="network-lines"
-                            viewBox="0 0 700 420"
-                            preserveAspectRatio="none">
-
-
-                            <line
-                                x1="350"
-                                y1="210"
-                                x2="130"
-                                y2="80"/>
-
-                            <line
-                                x1="350"
-                                y1="210"
-                                x2="570"
-                                y2="80"/>
-
-                            <line
-                                x1="350"
-                                y1="210"
-                                x2="100"
-                                y2="300"/>
-
-                            <line
-                                x1="350"
-                                y1="210"
-                                x2="600"
-                                y2="300"/>
-
-                            <line
-                                x1="350"
-                                y1="210"
-                                x2="350"
-                                y2="370"/>
-
-                        </svg>
-
-                    </div>
-
-
-                    <div class="network-footer">
-
-                        <span>
-                            NODES
-                            <strong>06</strong>
-                        </span>
-
-                        <span>
-                            CHANNEL
-                            <strong>SECURE</strong>
-                        </span>
-
-                        <span>
-                            LATENCY
-                            <strong>12ms</strong>
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-
-                <!-- LIVE FEED -->
-
-                <div class="feed-panel">
-
-                    <div class="panel-title">
-
-                        <span>
-                            LIVE SECURITY FEED
-                        </span>
-
-                        <span class="panel-status">
-                            ● LIVE
-                        </span>
-
-                    </div>
-
-
-                    <div id="security-feed"
-                         class="security-feed">
-
-                        <div class="feed-item">
-
-                            <time>
-                                --:--:--
-                            </time>
-
-                            <span class="feed-dot"></span>
+                            <div class="role">
+                                CYBERSECURITY <strong>ANALYST</strong>
+                            </div>
 
                             <p>
-                                SEC-OS kernel initialized
+                                Security-focused professional interested in
+                                vulnerability assessment, web application
+                                security, network security and security operations.
                             </p>
 
-                        </div>
 
+                            <div class="hero-buttons">
 
-                        <div class="feed-item">
+                                <a href="#operations"
+                                    class="btn btn-primary magnetic">
+                                    <span>→</span>
+                                    VIEW MY WORK
+                                </a>
 
-                            <time>
-                                --:--:--
-                            </time>
+                                <a href="#contact"
+                                    class="btn btn-secondary magnetic">
+                                    CONTACT ME
+                                </a>
 
-                            <span class="feed-dot"></span>
+                                <a href="#about"
+                                    class="btn btn-ghost magnetic">
+                                    PROFILE
+                                </a>
 
-                            <p>
-                                Secure channel established
-                            </p>
-
-                        </div>
-
-
-                        <div class="feed-item">
-
-                            <time>
-                                --:--:--
-                            </time>
-
-                            <span class="feed-dot"></span>
-
-                            <p>
-                                Portfolio modules loaded
-                            </p>
+                            </div>
 
                         </div>
 
@@ -647,350 +250,651 @@
 
                 </div>
 
-            </div>
 
+                <!-- TELEMETRY -->
 
-        </section>
+                <div class="hero-telemetry">
 
+                    <div class="telemetry-item">
+                        <span>SYSTEM</span>
+                        <strong>OPERATIONAL</strong>
+                    </div>
 
+                    <div class="telemetry-item">
+                        <span>THREAT LEVEL</span>
+                        <strong class="green">LOW</strong>
+                    </div>
 
-        <!-- =============================================
-             PROFILE
-        ============================================== -->
+                    <div class="telemetry-item">
+                        <span>SECURITY</span>
+                        <strong>ACTIVE</strong>
+                    </div>
 
-        <section id="profile"
-                 class="dashboard-section module-section">
+                    <div class="telemetry-item">
+                        <span>LOCATION</span>
+                        <strong>INDIA</strong>
+                    </div>
 
-
-            <div class="module-number">
-                01
-            </div>
-
-
-            <div>
-
-                <div class="eyebrow">
-                    SECURITY IDENTITY
                 </div>
 
-                <h2>
-                    SMIT
-                    <span>BORKHETARIA</span>
-                </h2>
 
-                <p class="module-description">
+                <a href="#about" class="scroll-indicator magnetic">
 
-                    Cybersecurity-focused professional building
-                    practical experience across vulnerability
-                    assessment, web security, network security
-                    and security operations.
+                    <span>SCROLL TO EXPLORE</span>
 
-                </p>
+                    <div class="scroll-arrow">
+                        ↓
+                    </div>
 
-            </div>
+                </a>
 
-        </section>
+            </section>
 
 
+            <!-- =================================
+                 ABOUT
+            ================================== -->
 
-        <!-- =============================================
-             OPERATIONS
-        ============================================== -->
+            <section id="about" class="section">
 
-        <section id="operations"
-                 class="dashboard-section module-section">
+                <div class="section-header">
 
-
-            <div class="module-number">
-                02
-            </div>
-
-
-            <div class="module-content">
-
-                <div class="eyebrow">
-                    SECURITY OPERATIONS
-                </div>
-
-                <h2>
-                    PROJECT
-                    <span>ARCHIVE</span>
-                </h2>
-
-
-                <div class="operation-preview">
-
+                    <div class="section-number">
+                        01 //
+                    </div>
 
                     <div>
-                        <small>
-                            OPERATION // 001
-                        </small>
+                        <div class="section-label">
+                            IDENTITY MODULE
+                        </div>
 
-                        <h3>
-                            WEB SECURITY
-                            ASSESSMENT
-                        </h3>
-                    </div>
-
-
-                    <div class="operation-status">
-                        READY
+                        <h2>
+                            SECURITY
+                            <span>PROFILE</span>
+                        </h2>
                     </div>
 
                 </div>
 
 
-                <div class="operation-preview">
+                <div class="about-grid">
 
+                    <div class="about-text">
+
+                        <div class="terminal-window">
+
+                            <div class="terminal-header">
+
+                                <span>profile.sh</span>
+
+                                <div>
+                                    <i></i>
+                                    <i></i>
+                                    <i></i>
+                                </div>
+
+                            </div>
+
+                            <div class="terminal-body">
+
+                                <p>
+                                    <span class="green">$</span>
+                                    whoami
+                                </p>
+
+                                <p class="output">
+                                    cybersecurity analyst
+                                </p>
+
+                                <p>
+                                    <span class="green">$</span>
+                                    cat mission.txt
+                                </p>
+
+                                <p class="output">
+                                    Identify vulnerabilities.<br>
+                                    Understand threats.<br>
+                                    Build stronger security.
+                                </p>
+
+                                <p>
+                                    <span class="green">$</span>
+                                    status
+                                </p>
+
+                                <p class="output green">
+                                    AVAILABLE_FOR_OPPORTUNITIES
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="stats-panel">
+
+                        <div class="stat-card magnetic">
+
+                            <span class="stat-label">
+                                FOCUS
+                            </span>
+
+                            <strong>
+                                VAPT
+                            </strong>
+
+                            <small>
+                                Vulnerability Assessment
+                            </small>
+
+                        </div>
+
+
+                        <div class="stat-card magnetic">
+
+                            <span class="stat-label">
+                                DOMAIN
+                            </span>
+
+                            <strong>
+                                WEB SEC
+                            </strong>
+
+                            <small>
+                                Application Security
+                            </small>
+
+                        </div>
+
+
+                        <div class="stat-card magnetic">
+
+                            <span class="stat-label">
+                                DOMAIN
+                            </span>
+
+                            <strong>
+                                NETWORK
+                            </strong>
+
+                            <small>
+                                Network Security
+                            </small>
+
+                        </div>
+
+
+                        <div class="stat-card magnetic">
+
+                            <span class="stat-label">
+                                FOCUS
+                            </span>
+
+                            <strong>
+                                SOC
+                            </strong>
+
+                            <small>
+                                Security Operations
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================
+                 OPERATIONS
+            ================================== -->
+
+            <section id="operations" class="section operations">
+
+                <div class="section-header">
+
+                    <div class="section-number">
+                        02 //
+                    </div>
 
                     <div>
-                        <small>
-                            OPERATION // 002
-                        </small>
+                        <div class="section-label">
+                            MISSION DATABASE
+                        </div>
+
+                        <h2>
+                            SECURITY
+                            <span>OPERATIONS</span>
+                        </h2>
+                    </div>
+
+                </div>
+
+
+                <div class="operations-grid">
+
+
+                    <article class="operation-card magnetic">
+
+                        <div class="operation-top">
+
+                            <span>
+                                OPERATION // 001
+                            </span>
+
+                            <span class="operation-status">
+                                COMPLETED
+                            </span>
+
+                        </div>
 
                         <h3>
-                            CYBERSECURITY
-                            ANALYSIS
+                            OWASP ZAP
+                            <span>VULNERABILITY ASSESSMENT</span>
                         </h3>
-                    </div>
+
+                        <p>
+                            Web application security assessment focused on
+                            identifying potential vulnerabilities and security
+                            weaknesses.
+                        </p>
+
+                        <div class="tags">
+
+                            <span>OWASP ZAP</span>
+                            <span>VAPT</span>
+                            <span>WEB SECURITY</span>
+
+                        </div>
+
+                        <div class="operation-footer">
+
+                            <span>
+                                STATUS: <b>SUCCESS</b>
+                            </span>
+
+                            <span class="arrow">
+                                ↗
+                            </span>
+
+                        </div>
+
+                    </article>
 
 
-                    <div class="operation-status">
-                        READY
-                    </div>
+                    <article class="operation-card magnetic">
+
+                        <div class="operation-top">
+
+                            <span>
+                                OPERATION // 002
+                            </span>
+
+                            <span class="operation-status">
+                                COMPLETED
+                            </span>
+
+                        </div>
+
+                        <h3>
+                            CYBER
+                            <span>SECURITY SIMULATION</span>
+                        </h3>
+
+                        <p>
+                            Practical cybersecurity simulation involving
+                            investigation, analysis and security-oriented
+                            problem solving.
+                        </p>
+
+                        <div class="tags">
+
+                            <span>LOG ANALYSIS</span>
+                            <span>THREAT DETECTION</span>
+
+                        </div>
+
+                        <div class="operation-footer">
+
+                            <span>
+                                STATUS: <b>SUCCESS</b>
+                            </span>
+
+                            <span class="arrow">
+                                ↗
+                            </span>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="operation-card magnetic">
+
+                        <div class="operation-top">
+
+                            <span>
+                                OPERATION // 003
+                            </span>
+
+                            <span class="operation-status">
+                                ACTIVE
+                            </span>
+
+                        </div>
+
+                        <h3>
+                            SECURITY
+                            <span>RESEARCH LAB</span>
+                        </h3>
+
+                        <p>
+                            Practical exploration of network, web and
+                            application security concepts through hands-on
+                            labs and controlled environments.
+                        </p>
+
+                        <div class="tags">
+
+                            <span>NETWORK</span>
+                            <span>LINUX</span>
+                            <span>SECURITY LAB</span>
+
+                        </div>
+
+                        <div class="operation-footer">
+
+                            <span>
+                                STATUS: <b>ACTIVE</b>
+                            </span>
+
+                            <span class="arrow">
+                                ↗
+                            </span>
+
+                        </div>
+
+                    </article>
 
                 </div>
 
-            </div>
-
-        </section>
+            </section>
 
 
+            <!-- =================================
+                 ARSENAL
+            ================================== -->
 
-        <!-- =============================================
-             ARSENAL
-        ============================================== -->
+            <section id="arsenal" class="section">
 
-        <section id="arsenal"
-                 class="dashboard-section module-section">
+                <div class="section-header">
 
+                    <div class="section-number">
+                        03 //
+                    </div>
 
-            <div class="module-number">
-                03
-            </div>
+                    <div>
+                        <div class="section-label">
+                            TOOLKIT DATABASE
+                        </div>
 
+                        <h2>
+                            SECURITY
+                            <span>ARSENAL</span>
+                        </h2>
+                    </div>
 
-            <div class="module-content">
-
-                <div class="eyebrow">
-                    SECURITY ARSENAL
                 </div>
-
-                <h2>
-                    TOOLS &
-                    <span>TECHNOLOGY</span>
-                </h2>
 
 
                 <div class="arsenal-grid">
 
-                    <div>NMAP</div>
-                    <div>WIRESHARK</div>
-                    <div>OWASP ZAP</div>
-                    <div>BURP SUITE</div>
-                    <div>LINUX</div>
-                    <div>PYTHON</div>
-                    <div>GIT</div>
-                    <div>SQL</div>
 
-                </div>
+                    <div class="arsenal-category">
 
-            </div>
-
-        </section>
-
-
-
-        <!-- =============================================
-             CREDENTIALS
-        ============================================== -->
-
-        <section id="credentials"
-                 class="dashboard-section module-section">
-
-
-            <div class="module-number">
-                04
-            </div>
-
-
-            <div class="module-content">
-
-                <div class="eyebrow">
-                    VERIFIED CREDENTIALS
-                </div>
-
-                <h2>
-                    CERTIFICATION
-                    <span>VAULT</span>
-                </h2>
-
-
-                <div class="credential-card">
-
-                    <div>
-                        <small>
-                            CREDENTIAL // 001
-                        </small>
+                        <div class="category-number">
+                            01
+                        </div>
 
                         <h3>
-                            CYBERSECURITY
-                            CERTIFICATION
+                            RECON
                         </h3>
+
+                        <div class="tool-list">
+
+                            <span class="tool magnetic">NMAP</span>
+                            <span class="tool magnetic">WHOIS</span>
+                            <span class="tool magnetic">DNS</span>
+                            <span class="tool magnetic">TRACEROUTE</span>
+
+                        </div>
+
                     </div>
 
-                    <span>
-                        VERIFIED
-                    </span>
+
+                    <div class="arsenal-category">
+
+                        <div class="category-number">
+                            02
+                        </div>
+
+                        <h3>
+                            NETWORK
+                        </h3>
+
+                        <div class="tool-list">
+
+                            <span class="tool magnetic">WIRESHARK</span>
+                            <span class="tool magnetic">TCP/IP</span>
+                            <span class="tool magnetic">FIREWALLS</span>
+                            <span class="tool magnetic">VPN</span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="arsenal-category">
+
+                        <div class="category-number">
+                            03
+                        </div>
+
+                        <h3>
+                            WEB SECURITY
+                        </h3>
+
+                        <div class="tool-list">
+
+                            <span class="tool magnetic">BURP SUITE</span>
+                            <span class="tool magnetic">OWASP ZAP</span>
+                            <span class="tool magnetic">HTTP</span>
+                            <span class="tool magnetic">OWASP</span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="arsenal-category">
+
+                        <div class="category-number">
+                            04
+                        </div>
+
+                        <h3>
+                            DEVELOPMENT
+                        </h3>
+
+                        <div class="tool-list">
+
+                            <span class="tool magnetic">PYTHON</span>
+                            <span class="tool magnetic">JAVASCRIPT</span>
+                            <span class="tool magnetic">SQL</span>
+                            <span class="tool magnetic">GIT</span>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
-            </div>
 
-        </section>
+                <!-- LIVE TELEMETRY -->
 
+                <div class="telemetry-dashboard">
 
+                    <div class="telemetry-title">
+                        LIVE SECURITY TELEMETRY
+                    </div>
 
-        <!-- =============================================
-             INTELLIGENCE
-        ============================================== -->
+                    <div class="telemetry-bars">
 
-        <section id="intel"
-                 class="dashboard-section module-section">
+                        <div class="telemetry-bar">
 
+                            <div>
+                                <span>VAPT</span>
+                                <span>87%</span>
+                            </div>
 
-            <div class="module-number">
-                05
-            </div>
+                            <div class="bar">
+                                <div style="--width:87%"></div>
+                            </div>
 
-
-            <div class="module-content">
-
-                <div class="eyebrow">
-                    INTELLIGENCE
-                </div>
-
-                <h2>
-                    ACTIVITY
-                    <span>LOG</span>
-                </h2>
+                        </div>
 
 
-                <div class="intel-line">
-                    <span>2026</span>
-                    <strong>
-                        Cybersecurity portfolio initialized
-                    </strong>
-                </div>
+                        <div class="telemetry-bar">
 
-                <div class="intel-line">
-                    <span>2026</span>
-                    <strong>
-                        Security operations module deployed
-                    </strong>
-                </div>
+                            <div>
+                                <span>NETWORK SECURITY</span>
+                                <span>82%</span>
+                            </div>
 
-            </div>
+                            <div class="bar">
+                                <div style="--width:82%"></div>
+                            </div>
 
-        </section>
+                        </div>
 
 
+                        <div class="telemetry-bar">
 
-        <!-- =============================================
-             CONTACT
-        ============================================== -->
+                            <div>
+                                <span>WEB SECURITY</span>
+                                <span>85%</span>
+                            </div>
 
-        <section id="contact"
-                 class="dashboard-section module-section contact-section">
+                            <div class="bar">
+                                <div style="--width:85%"></div>
+                            </div>
 
-
-            <div class="module-number">
-                06
-            </div>
-
-
-            <div class="module-content">
-
-                <div class="eyebrow">
-                    SECURE CHANNEL
-                </div>
-
-                <h2>
-                    ESTABLISH
-                    <span>CONNECTION</span>
-                </h2>
+                        </div>
 
 
-                <p class="module-description">
+                        <div class="telemetry-bar">
 
-                    Interested in cybersecurity,
-                    collaboration or opportunities?
+                            <div>
+                                <span>SOC</span>
+                                <span>78%</span>
+                            </div>
 
-                </p>
+                            <div class="bar">
+                                <div style="--width:78%"></div>
+                            </div>
 
+                        </div>
 
-                <div class="contact-buttons">
-
-                    <a href="#"
-                       class="contact-button">
-                        LINKEDIN →
-                    </a>
-
-                    <a href="#"
-                       class="contact-button">
-                        GITHUB →
-                    </a>
-
-                    <a href="#"
-                       class="contact-button">
-                        EMAIL →
-                    </a>
+                    </div>
 
                 </div>
 
-            </div>
-
-        </section>
+            </section>
 
 
-    </main>
+            <!-- =================================
+                 CONTACT
+            ================================== -->
+
+            <section id="contact" class="section contact">
+
+                <div class="contact-box">
+
+                    <div class="section-label">
+                        SECURE CHANNEL
+                    </div>
+
+                    <h2>
+                        ESTABLISH
+                        <span>CONNECTION</span>
+                    </h2>
+
+                    <p>
+                        Open to cybersecurity opportunities, projects,
+                        collaborations and professional conversations.
+                    </p>
+
+                    <div class="contact-buttons">
+
+                        <a href="mailto:YOUR_EMAIL@example.com"
+                            class="btn btn-primary magnetic">
+                            EMAIL
+                        </a>
+
+                        <a href="https://github.com/"
+                            target="_blank"
+                            class="btn btn-secondary magnetic">
+                            GITHUB
+                        </a>
+
+                        <a href="https://linkedin.com/"
+                            target="_blank"
+                            class="btn btn-secondary magnetic">
+                            LINKEDIN
+                        </a>
+
+                    </div>
+
+                    <div class="connection-status">
+                        <span class="status-pulse"></span>
+                        SECURE CHANNEL READY
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
 
 
-    <!-- =================================================
-         FOOTER
-    ================================================== -->
+        <!-- =====================================
+             FOOTER
+        ====================================== -->
 
-    <footer class="app-footer">
+        <footer>
 
-        <span>
-            SMIT // SEC-OS
-        </span>
+            <span>
+                SMIT // SECURITY OPERATIONS
+            </span>
 
-        <span>
-            SECURITY OPERATIONS ENVIRONMENT
-        </span>
+            <span>
+                © 2026 SMIT BORKHETARIA
+            </span>
 
-        <span>
-            © 2026
-        </span>
+            <span class="green">
+                SYSTEM ONLINE
+            </span>
 
-    </footer>
+        </footer>
+
+    </div>
 
 
-</div>
-
-
-<script src="script.js?v=3"></script>
+    <script src="script.js"></script>
 
 </body>
 
