@@ -2312,8 +2312,8 @@ if (networkCanvas && networkHero) {
     drawNetwork();
 }
 
-               /* =========================================
-   LIVE NETWORK // LAYER FIX
+/* =========================================
+   LIVE NETWORK // FINAL LAYER FIX
 ========================================= */
 
 .hero {
@@ -2327,19 +2327,29 @@ if (networkCanvas && networkHero) {
 #security-network {
     position: absolute;
     inset: 0;
-    z-index: 1;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
     pointer-events: none;
+    opacity: 0.65;
 }
 
-.hero-content,
-.hero-telemetry,
-.scroll-indicator,
-.network-status {
+.hero-content {
     position: relative;
+    z-index: 3;
+}
+
+.hero-telemetry {
+    z-index: 3;
+}
+
+.scroll-indicator {
     z-index: 3;
 }
 
 .network-status {
     position: absolute;
-    z-index: 5;
+    top: 24px;
+    right: 28px;
+    z-index: 4;
 }
