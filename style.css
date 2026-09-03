@@ -1937,3 +1937,89 @@ body.cursor-active .cursor-dot {
     transition:
         transform 0.2s ease-out;
 }
+
+/* =========================================
+   LIVE CYBER NETWORK
+========================================= */
+
+#security-network {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.75;
+}
+
+.network-status {
+    position: absolute;
+    top: 24px;
+    right: 28px;
+    z-index: 5;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    font-family: monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+
+    color: rgba(255, 255, 255, 0.65);
+
+    padding: 9px 13px;
+
+    border: 1px solid rgba(0, 255, 102, 0.18);
+    background: rgba(0, 0, 0, 0.35);
+
+    backdrop-filter: blur(8px);
+}
+
+.network-dot {
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: var(--green);
+
+    box-shadow:
+        0 0 6px var(--green),
+        0 0 14px rgba(0, 255, 102, 0.5);
+
+    animation: networkPulse 1.8s infinite;
+}
+
+.network-active {
+    color: var(--green);
+    margin-left: 5px;
+}
+
+@keyframes networkPulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.35;
+        transform: scale(0.7);
+    }
+}
+
+@media (max-width: 768px) {
+
+    .network-status {
+        top: 15px;
+        right: 15px;
+        font-size: 8px;
+        padding: 7px 9px;
+    }
+
+    #security-network {
+        opacity: 0.5;
+    }
+}
