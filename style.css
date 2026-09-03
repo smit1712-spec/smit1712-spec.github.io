@@ -2311,3 +2311,35 @@ if (networkCanvas && networkHero) {
 
     drawNetwork();
 }
+
+               /* =========================================
+   LIVE NETWORK // LAYER FIX
+========================================= */
+
+.hero {
+    position: relative;
+}
+
+.grid-background {
+    z-index: 0;
+}
+
+#security-network {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.hero-content,
+.hero-telemetry,
+.scroll-indicator,
+.network-status {
+    position: relative;
+    z-index: 3;
+}
+
+.network-status {
+    position: absolute;
+    z-index: 5;
+}
