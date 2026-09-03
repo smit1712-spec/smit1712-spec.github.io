@@ -576,3 +576,323 @@ if (hero) {
     });
 
 }
+
+/* =====================================================
+   LIVE CYBER NETWORK // HERO BACKGROUND
+===================================================== */
+
+const networkCanvas = document.getElementById("security-network");
+const networkHero = document.querySelector(".hero");
+
+if (networkCanvas && networkHero) {
+
+    const ctx = networkCanvas.getContext("2d");
+
+    let nodes = [];
+    let width = 0;
+    let height = 0;
+
+    const mouse = {
+        x: -1000,
+        y: -1000
+    };
+
+
+    /* =========================================
+       CREATE NETWORK NODES
+    ========================================= */
+
+    function createNodes() {
+
+        nodes = [];
+
+        const isMobile = window.innerWidth <= 768;
+        const count = isMobile ? 22 : 45;
+
+        for (let i = 0; i < count; i++) {
+
+            nodes.push({
+
+                x: Math.random() * width,
+                y: Math.random() * height,
+
+                vx: (Math.random() - 0.5) * 0.35,
+                vy: (Math.random() - 0.5) * 0.35,
+
+                radius: Math.random() * 1.5 + 0.7
+            });
+        }
+    }
+
+
+    /* =========================================
+       RESIZE CANVAS
+    ========================================= */
+
+    function resizeNetwork() {
+
+        const rect = networkHero.getBoundingClientRect();
+
+        width = rect.width;
+        height = rect.height;
+
+        const dpr =
+            Math.min(window.devicePixelRatio || 1, 2);
+
+        networkCanvas.width = width * dpr;
+        networkCanvas.height = height * dpr;
+
+        networkCanvas.style.width = width + "px";
+        networkCanvas.style.height = height + "px";
+
+        ctx.setTransform(
+            dpr,
+            0,
+            0,
+            dpr,
+            0,
+            0
+        );
+
+        createNodes();
+    }
+
+
+    /* =========================================
+       MOUSE TRACKING
+    ========================================= */
+
+    networkHero.addEventListener("mousemove", (event) => {
+
+        const rect =
+            networkHero.getBoundingClientRect();
+
+        mouse.x =
+            event.clientX - rect.left;
+
+        mouse.y =
+            event.clientY - rect.top;
+
+    });
+
+
+    networkHero.addEventListener("mouseleave", () => {
+
+        mouse.x = -1000;
+        mouse.y = -1000;
+
+    });
+
+
+    /* =========================================
+       DRAW NETWORK
+    ========================================= */
+
+    function drawNetwork() {
+
+        ctx.clearRect(
+            0,
+            0,
+            width,
+            height
+        );
+
+
+        /* -------------------------------------
+           MOVE NODES
+        ------------------------------------- */
+
+        nodes.forEach(node => {
+
+            node.x += node.vx;
+            node.y += node.vy;
+
+
+            if (node.x <= 0 || node.x >= width) {
+                node.vx *= -1;
+            }
+
+            if (node.y <= 0 || node.y >= height) {
+                node.vy *= -1;
+            }
+
+
+            /* Mouse repulsion */
+
+            const dx =
+                node.x - mouse.x;
+
+            const dy =
+                node.y - mouse.y;
+
+            const distance =
+                Math.sqrt(dx * dx + dy * dy);
+
+
+            if (distance < 140) {
+
+                const force =
+                    (140 - distance) / 140;
+
+                node.x +=
+                    (dx / (distance || 1)) *
+                    force *
+                    0.7;
+
+                node.y +=
+                    (dy / (distance || 1)) *
+                    force *
+                    0.7;
+
+            }
+
+        });
+
+
+        /* -------------------------------------
+           NODE CONNECTIONS
+        ------------------------------------- */
+
+        for (let i = 0; i < nodes.length; i++) {
+
+            for (let j = i + 1; j < nodes.length; j++) {
+
+                const a = nodes[i];
+                const b = nodes[j];
+
+                const dx =
+                    a.x - b.x;
+
+                const dy =
+                    a.y - b.y;
+
+                const distance =
+                    Math.sqrt(dx * dx + dy * dy);
+
+
+                if (distance < 150) {
+
+                    const opacity =
+                        (1 - distance / 150) * 0.28;
+
+                    ctx.beginPath();
+
+                    ctx.moveTo(
+                        a.x,
+                        a.y
+                    );
+
+                    ctx.lineTo(
+                        b.x,
+                        b.y
+                    );
+
+                    ctx.strokeStyle =
+                        `rgba(0, 255, 102, ${opacity})`;
+
+                    ctx.lineWidth = 0.7;
+
+                    ctx.stroke();
+
+                }
+
+            }
+
+        }
+
+
+        /* -------------------------------------
+           MOUSE CONNECTIONS
+        ------------------------------------- */
+
+        nodes.forEach(node => {
+
+            const dx =
+                node.x - mouse.x;
+
+            const dy =
+                node.y - mouse.y;
+
+            const distance =
+                Math.sqrt(dx * dx + dy * dy);
+
+
+            if (distance < 180) {
+
+                const opacity =
+                    (1 - distance / 180) * 0.5;
+
+                ctx.beginPath();
+
+                ctx.moveTo(
+                    node.x,
+                    node.y
+                );
+
+                ctx.lineTo(
+                    mouse.x,
+                    mouse.y
+                );
+
+                ctx.strokeStyle =
+                    `rgba(0, 255, 102, ${opacity})`;
+
+                ctx.lineWidth = 1;
+
+                ctx.stroke();
+
+            }
+
+        });
+
+
+        /* -------------------------------------
+           DRAW NODES
+        ------------------------------------- */
+
+        nodes.forEach(node => {
+
+            ctx.beginPath();
+
+            ctx.arc(
+                node.x,
+                node.y,
+                node.radius,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.fillStyle =
+                "rgba(0, 255, 102, 0.8)";
+
+            ctx.shadowBlur = 8;
+
+            ctx.shadowColor =
+                "rgba(0, 255, 102, 0.7)";
+
+            ctx.fill();
+
+            ctx.shadowBlur = 0;
+
+        });
+
+
+        requestAnimationFrame(drawNetwork);
+
+    }
+
+
+    /* =========================================
+       START NETWORK
+    ========================================= */
+
+    window.addEventListener(
+        "resize",
+        resizeNetwork
+    );
+
+    resizeNetwork();
+
+    drawNetwork();
+
+}
