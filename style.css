@@ -1,2305 +1,1369 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 /* =====================================================
    SMIT // SECURITY OPERATIONS
-   GLOBAL
+   JAVASCRIPT ENGINE
 ===================================================== */
-
-:root {
-    --bg: #020403;
-    --panel: #050907;
-    --panel-light: #07100b;
-
-    --green: #00ff66;
-    --green-soft: rgba(0, 255, 102, 0.15);
-
-    --cyan: #00e5ff;
-
-    --white: #f2f5f3;
-    --gray: #89938d;
-    --muted: #46514b;
-
-    --border: rgba(0, 255, 102, 0.16);
-
---font-mono: "JetBrains Mono", monospace;
---font-main: "Inter", sans-serif;
---font-display: "Space Grotesk", sans-serif;
-}
 
 
 /* =====================================================
-   RESET
+   BOOT SEQUENCE
 ===================================================== */
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+const bootScreen = document.getElementById("boot-screen");
+const progressFill = document.getElementById("progress-fill");
+const progressNumber = document.getElementById("progress-number");
+const bootLog = document.getElementById("boot-log");
+const app = document.getElementById("app");
+
+
+const bootMessages = [
+    "Initializing kernel...",
+    "Loading security modules...",
+    "Mounting encrypted filesystem...",
+    "Checking network interfaces...",
+    "Loading vulnerability assessment module...",
+    "Loading security operations module...",
+    "Verifying identity...",
+    "Establishing secure connection...",
+    "Security profile loaded.",
+    "ACCESS GRANTED"
+];
+
+
+let progress = 0;
+let messageIndex = 0;
+
+
+function bootSequence() {
+
+    const interval = setInterval(() => {
+
+        progress += Math.floor(Math.random() * 4) + 1;
+
+
+        if (progress >= 100) {
+
+            progress = 100;
+
+            clearInterval(interval);
+
+            progressFill.style.width = "100%";
+            progressNumber.textContent = "100%";
+
+            bootLog.textContent = "> ACCESS GRANTED";
+
+
+            setTimeout(() => {
+
+                bootScreen.classList.add("hidden");
+
+                app.classList.add("visible");
+
+                document.body.style.overflow = "auto";
+
+            }, 900);
+
+            return;
+        }
+
+
+        progressFill.style.width = progress + "%";
+
+        progressNumber.textContent =
+            progress.toString().padStart(2, "0") + "%";
+
+
+        if (
+            progress > messageIndex * 10 &&
+            messageIndex < bootMessages.length
+        ) {
+
+            bootLog.textContent =
+                "> " + bootMessages[messageIndex];
+
+            messageIndex++;
+
+        }
+
+    }, 80);
+
 }
 
-html {
-    scroll-behavior: smooth;
-}
 
-body {
-    background: var(--bg);
-    color: var(--white);
+document.body.style.overflow = "hidden";
 
-    font-family: var(--font-main);
+setTimeout(bootSequence, 500);
 
-    overflow-x: hidden;
-
-    cursor: none;
-}
-
-a {
-    color: inherit;
-    text-decoration: none;
-}
-
-button,
-a {
-    cursor: none;
-}
 
 
 /* =====================================================
-   CUSTOM CURSOR
+   LIVE CLOCK
 ===================================================== */
 
-.cursor-dot {
-    position: fixed;
+const clock = document.getElementById("clock");
 
-    width: 7px;
-    height: 7px;
 
-    background: var(--green);
+function updateClock() {
 
-    border-radius: 50%;
+    const now = new Date();
 
-    pointer-events: none;
+    let hours = now.getHours();
 
-    z-index: 99999;
+    const minutes =
+        now.getMinutes().toString().padStart(2, "0");
 
-    transform: translate(-50%, -50%);
+    const seconds =
+        now.getSeconds().toString().padStart(2, "0");
 
-    box-shadow:
-        0 0 10px var(--green),
-        0 0 25px rgba(0, 255, 102, 0.5);
-}
+    const period = hours >= 12 ? "PM" : "AM";
 
-.cursor-ring {
-    position: fixed;
 
-    width: 34px;
-    height: 34px;
+    hours = hours % 12;
 
-    border: 1px solid var(--green);
+    hours = hours || 12;
 
-    border-radius: 50%;
 
-    pointer-events: none;
+    clock.textContent =
+        `${hours}:${minutes}:${seconds} ${period}`;
 
-    z-index: 99998;
-
-    transform: translate(-50%, -50%);
-
-    transition:
-        width 0.25s ease,
-        height 0.25s ease,
-        border-color 0.25s ease,
-        background 0.25s ease;
-
-    mix-blend-mode: difference;
-}
-
-.cursor-ring.hover {
-    width: 62px;
-    height: 62px;
-
-    background: rgba(0, 255, 102, 0.08);
-
-    border-color: var(--green);
-}
-
-.cursor-ring.click {
-    width: 90px;
-    height: 90px;
-
-    opacity: 0;
-
-    transition:
-        width 0.35s ease,
-        height 0.35s ease,
-        opacity 0.35s ease;
 }
 
 
-/* Cursor trails */
+updateClock();
 
-.cursor-trail {
-    position: fixed;
+setInterval(updateClock, 1000);
 
-    width: 5px;
-    height: 5px;
-
-    border-radius: 50%;
-
-    background: var(--green);
-
-    pointer-events: none;
-
-    z-index: 99990;
-
-    opacity: 0.35;
-
-    transform: translate(-50%, -50%);
-
-    filter: blur(1px);
-}
-
-.trail-1 {
-    opacity: 0.25;
-}
-
-.trail-2 {
-    opacity: 0.15;
-}
-
-.trail-3 {
-    opacity: 0.08;
-}
 
 
 /* =====================================================
-   BOOT SCREEN
+   TERMINAL TYPING EFFECT
 ===================================================== */
 
-#boot-screen {
-    position: fixed;
+const typingText =
+    document.getElementById("typing-text");
 
-    inset: 0;
 
-    z-index: 100000;
+const terminalCommands = [
 
-    background: #020504;
+    " initializing_security_profile",
+    " loading_security_modules",
+    " scanning_environment",
+    " verifying_credentials",
+    " establishing_secure_channel",
+    " access_granted"
 
-    display: flex;
-    flex-direction: column;
+];
 
-    justify-content: space-between;
 
-    padding: 30px 4%;
+let commandIndex = 0;
 
-    border: 1px solid rgba(0, 255, 102, 0.2);
+let charIndex = 0;
 
-    transition:
-        opacity 0.8s ease,
-        visibility 0.8s ease;
-}
+let deleting = false;
 
-#boot-screen.hidden {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-}
 
-.boot-top,
-.boot-footer {
-    display: flex;
+function typeTerminal() {
 
-    justify-content: space-between;
+    const current =
+        terminalCommands[commandIndex];
 
-    color: var(--green);
 
-    font-size: 11px;
+    if (!deleting) {
 
-    letter-spacing: 4px;
-}
+        typingText.textContent =
+            current.substring(0, charIndex + 1);
 
-.boot-center {
-    width: min(900px, 90%);
+        charIndex++;
 
-    margin: auto;
-}
 
-.boot-label {
-    color: var(--cyan);
+        if (charIndex === current.length) {
 
-    letter-spacing: 6px;
+            deleting = true;
 
-    font-size: 11px;
+            setTimeout(typeTerminal, 1500);
 
-    margin-bottom: 30px;
+            return;
+        }
 
-    text-align: center;
-}
+    } else {
 
-.boot-center h1 {
-    font-family: var(--font-main);
+        typingText.textContent =
+            current.substring(0, charIndex - 1);
 
-    font-size: clamp(55px, 10vw, 145px);
+        charIndex--;
 
-    line-height: 0.82;
 
-    letter-spacing: -7px;
+        if (charIndex === 0) {
 
-    text-align: center;
+            deleting = false;
 
-    margin-bottom: 60px;
-}
+            commandIndex++;
 
-.boot-center h1 span {
-    display: block;
 
-    color: transparent;
+            if (
+                commandIndex >=
+                terminalCommands.length
+            ) {
 
-    -webkit-text-stroke: 1px var(--green);
-}
+                commandIndex = 0;
 
-.boot-progress {
-    margin-bottom: 35px;
-}
+            }
 
-.progress-bar {
-    height: 5px;
+        }
 
-    background: #0b1710;
-
-    overflow: hidden;
-}
-
-#progress-fill {
-    width: 0%;
-
-    height: 100%;
-
-    background: var(--green);
-
-    box-shadow:
-        0 0 15px var(--green);
-
-    transition: width 0.1s linear;
-}
-
-.progress-info {
-    display: flex;
-
-    justify-content: space-between;
-
-    margin-top: 12px;
-
-    font-size: 10px;
-
-    color: var(--gray);
-
-    letter-spacing: 3px;
-}
-
-#progress-number {
-    color: var(--green);
-}
-
-.boot-terminal {
-    min-height: 130px;
-
-    padding: 25px;
-
-    border-left: 1px solid var(--green);
-
-    background: rgba(0, 255, 102, 0.025);
-
-    color: #718079;
-
-    font-size: 12px;
-
-    line-height: 2;
-}
-
-
-/* =====================================================
-   MAIN APP
-===================================================== */
-
-#app {
-    opacity: 0;
-
-    transition: opacity 1s ease;
-}
-
-#app.visible {
-    opacity: 1;
-}
-
-
-/* =====================================================
-   NAVBAR
-===================================================== */
-
-.navbar {
-    position: fixed;
-
-    top: 0;
-    left: 0;
-
-    width: 100%;
-
-    height: 75px;
-
-    padding: 0 6%;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    z-index: 1000;
-
-    border-bottom: 1px solid var(--border);
-
-    background: rgba(2, 4, 3, 0.75);
-
-    backdrop-filter: blur(15px);
-}
-
-.brand {
-    font-weight: bold;
-
-    font-size: 17px;
-
-    letter-spacing: 3px;
-
-    color: var(--green);
-}
-
-.prompt {
-    font-size: 24px;
-
-    margin-right: 7px;
-}
-
-.green {
-    color: var(--green);
-}
-
-.navbar nav {
-    display: flex;
-
-    gap: 28px;
-}
-
-.nav-link {
-    color: #b8c0bc;
-
-    font-size: 11px;
-
-    letter-spacing: 2px;
-
-    transition: 0.25s;
-}
-
-.nav-link span {
-    color: var(--muted);
-
-    margin-right: 5px;
-}
-
-.nav-link:hover,
-.nav-link.active {
-    color: var(--green);
-
-    text-shadow:
-        0 0 12px rgba(0, 255, 102, 0.4);
-}
-
-.system-status {
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-
-    font-size: 11px;
-
-    letter-spacing: 2px;
-
-    color: var(--green);
-}
-
-.status-pulse {
-    width: 7px;
-    height: 7px;
-
-    background: var(--green);
-
-    border-radius: 50%;
-
-    box-shadow: 0 0 12px var(--green);
-
-    animation: pulse 1.6s infinite;
-}
-
-.separator {
-    color: var(--muted);
-}
-
-@keyframes pulse {
-
-    0%,
-    100% {
-        opacity: 1;
-        transform: scale(1);
     }
 
-    50% {
-        opacity: 0.35;
-        transform: scale(0.65);
-    }
+
+    setTimeout(
+        typeTerminal,
+        deleting ? 30 : 70
+    );
+
 }
+
+
+typeTerminal();
+
 
 
 /* =====================================================
-   HERO
+   CUSTOM CURSOR // ADVANCED
 ===================================================== */
 
-.hero {
-    min-height: 100vh;
+const cursorDot =
+    document.querySelector(".cursor-dot");
 
-    position: relative;
+const cursorRing =
+    document.querySelector(".cursor-ring");
 
-    display: flex;
 
-    align-items: center;
+const trail1 =
+    document.querySelector(".trail-1");
 
-    padding: 130px 8% 70px;
+const trail2 =
+    document.querySelector(".trail-2");
 
-    overflow: hidden;
+const trail3 =
+    document.querySelector(".trail-3");
 
-    border-left: 1px solid var(--border);
 
-    border-right: 1px solid var(--border);
+let mouseX =
+    window.innerWidth / 2;
+
+let mouseY =
+    window.innerHeight / 2;
+
+
+let ringX = mouseX;
+let ringY = mouseY;
+
+let trail1X = mouseX;
+let trail1Y = mouseY;
+
+let trail2X = mouseX;
+let trail2Y = mouseY;
+
+let trail3X = mouseX;
+let trail3Y = mouseY;
+
+
+
+/* =====================================================
+   MOUSE TRACKING
+===================================================== */
+
+document.addEventListener(
+    "mousemove",
+    (event) => {
+
+        mouseX = event.clientX;
+
+        mouseY = event.clientY;
+
+
+        if (cursorDot) {
+
+            cursorDot.style.left =
+                mouseX + "px";
+
+            cursorDot.style.top =
+                mouseY + "px";
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   SMOOTH CURSOR ANIMATION
+===================================================== */
+
+function animateCursor() {
+
+    ringX +=
+        (mouseX - ringX) * 0.14;
+
+    ringY +=
+        (mouseY - ringY) * 0.14;
+
+
+    trail1X +=
+        (mouseX - trail1X) * 0.11;
+
+    trail1Y +=
+        (mouseY - trail1Y) * 0.11;
+
+
+    trail2X +=
+        (mouseX - trail2X) * 0.07;
+
+    trail2Y +=
+        (mouseY - trail2Y) * 0.07;
+
+
+    trail3X +=
+        (mouseX - trail3X) * 0.04;
+
+    trail3Y +=
+        (mouseY - trail3Y) * 0.04;
+
+
+
+    if (cursorRing) {
+
+        cursorRing.style.left =
+            ringX + "px";
+
+        cursorRing.style.top =
+            ringY + "px";
+
+    }
+
+
+    if (trail1) {
+
+        trail1.style.left =
+            trail1X + "px";
+
+        trail1.style.top =
+            trail1Y + "px";
+
+    }
+
+
+    if (trail2) {
+
+        trail2.style.left =
+            trail2X + "px";
+
+        trail2.style.top =
+            trail2Y + "px";
+
+    }
+
+
+    if (trail3) {
+
+        trail3.style.left =
+            trail3X + "px";
+
+        trail3.style.top =
+            trail3Y + "px";
+
+    }
+
+
+    requestAnimationFrame(
+        animateCursor
+    );
+
 }
 
-.grid-background {
-    position: absolute;
 
-    inset: 0;
+animateCursor();
 
-    background-image:
-        linear-gradient(
-            rgba(0, 255, 102, 0.055) 1px,
-            transparent 1px
-        ),
-        linear-gradient(
-            90deg,
-            rgba(0, 255, 102, 0.055) 1px,
-            transparent 1px
+
+
+/* =====================================================
+   INTERACTIVE HOVER
+===================================================== */
+
+const interactiveElements =
+    document.querySelectorAll(
+        "a, button, .magnetic, .operation-card, .tool, .arsenal-category"
+    );
+
+
+interactiveElements.forEach(
+    (element) => {
+
+        element.addEventListener(
+            "mouseenter",
+            () => {
+
+                if (cursorRing) {
+
+                    cursorRing.classList.add(
+                        "hover"
+                    );
+
+                }
+
+
+                document.body.classList.add(
+                    "cursor-active"
+                );
+
+            }
         );
 
-    background-size: 55px 55px;
 
-    animation: gridMove 20s linear infinite;
+        element.addEventListener(
+            "mouseleave",
+            () => {
 
-    mask-image:
-        linear-gradient(
-            to bottom,
-            black 0%,
-            black 60%,
-            transparent 100%
-        );
-}
+                if (cursorRing) {
 
-@keyframes gridMove {
+                    cursorRing.classList.remove(
+                        "hover"
+                    );
 
-    from {
-        transform: translate(0, 0);
-    }
-
-    to {
-        transform: translate(55px, 55px);
-    }
-}
-
-.hero::before {
-    content: "";
-
-    position: absolute;
-
-    width: 700px;
-    height: 700px;
-
-    left: 35%;
-    top: 20%;
-
-    background: var(--green);
-
-    opacity: 0.025;
-
-    filter: blur(180px);
-
-    pointer-events: none;
-}
-
-.scan-line {
-    position: absolute;
-
-    left: 0;
-
-    width: 100%;
-
-    height: 1px;
-
-    background: rgba(0, 255, 102, 0.25);
-
-    box-shadow: 0 0 15px rgba(0, 255, 102, 0.3);
-
-    animation: scan 7s linear infinite;
-
-    pointer-events: none;
-}
-
-@keyframes scan {
-
-    0% {
-        top: 0;
-    }
-
-    100% {
-        top: 100%;
-    }
-}
-
-.hero-content {
-    position: relative;
-
-    z-index: 2;
-
-    width: 100%;
-
-    max-width: 1400px;
-
-    margin: auto;
-}
-
-.terminal-intro {
-    margin-bottom: 55px;
-
-    color: #67736c;
-
-    font-size: 13px;
-
-    letter-spacing: 1px;
-}
-
-.terminal-user {
-    color: var(--green);
-}
-
-.terminal-cursor {
-    color: var(--green);
-
-    animation: blink 0.8s infinite;
-}
-
-@keyframes blink {
-
-    50% {
-        opacity: 0;
-    }
-}
-
-.hero-layout {
-    display: grid;
-
-    grid-template-columns: 300px 1fr;
-
-    gap: 80px;
-
-    align-items: center;
-}
+                }
 
 
-/* =====================================================
-   PROFILE
-===================================================== */
+                document.body.classList.remove(
+                    "cursor-active"
+                );
 
-.profile-area {
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-}
-
-.profile-frame {
-    width: 270px;
-    height: 270px;
-
-    position: relative;
-
-    border: 1px solid var(--green);
-
-    padding: 8px;
-
-    box-shadow:
-        0 0 40px rgba(0, 255, 102, 0.07);
-}
-
-.profile-placeholder {
-    width: 100%;
-    height: 100%;
-
-    background:
-        radial-gradient(
-            circle at center,
-            rgba(0, 255, 102, 0.12),
-            rgba(2, 7, 4, 0.95) 65%
+            }
         );
 
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    overflow: hidden;
-}
-
-.profile-initial {
-    font-family: Arial, sans-serif;
-
-    font-size: 130px;
-
-    font-weight: bold;
-
-    color: transparent;
-
-    -webkit-text-stroke: 1px var(--green);
-
-    text-shadow:
-        0 0 30px rgba(0, 255, 102, 0.25);
-}
-
-.profile-scan {
-    position: absolute;
-
-    left: 8px;
-    right: 8px;
-
-    height: 2px;
-
-    background: var(--green);
-
-    box-shadow:
-        0 0 15px var(--green);
-
-    opacity: 0.5;
-
-    animation: profileScan 3s linear infinite;
-}
-
-@keyframes profileScan {
-
-    from {
-        top: 10px;
     }
+);
 
-    to {
-        top: calc(100% - 10px);
-    }
-}
-
-.frame-corner {
-    position: absolute;
-
-    width: 15px;
-    height: 15px;
-
-    border-color: var(--green);
-
-    z-index: 3;
-}
-
-.top-left {
-    top: -4px;
-    left: -4px;
-
-    border-top: 2px solid;
-    border-left: 2px solid;
-}
-
-.top-right {
-    top: -4px;
-    right: -4px;
-
-    border-top: 2px solid;
-    border-right: 2px solid;
-}
-
-.bottom-left {
-    bottom: -4px;
-    left: -4px;
-
-    border-bottom: 2px solid;
-    border-left: 2px solid;
-}
-
-.bottom-right {
-    bottom: -4px;
-    right: -4px;
-
-    border-bottom: 2px solid;
-    border-right: 2px solid;
-}
-
-.online-badge {
-    position: absolute;
-
-    right: -35px;
-    bottom: 15px;
-
-    padding: 8px 13px;
-
-    background: #020504;
-
-    border: 1px solid var(--green);
-
-    color: var(--green);
-
-    font-size: 10px;
-
-    letter-spacing: 2px;
-}
-
-.online-badge span {
-    display: inline-block;
-
-    width: 6px;
-    height: 6px;
-
-    background: var(--green);
-
-    border-radius: 50%;
-
-    margin-right: 7px;
-
-    box-shadow: 0 0 10px var(--green);
-}
-
-.profile-id {
-    margin-top: 20px;
-
-    color: var(--muted);
-
-    font-size: 9px;
-
-    letter-spacing: 3px;
-}
 
 
 /* =====================================================
-   HERO TEXT
+   CLICK EFFECT
 ===================================================== */
 
-.classification {
-    color: var(--cyan);
+document.addEventListener(
+    "mousedown",
+    () => {
 
-    font-size: 10px;
+        if (!cursorRing) return;
 
-    letter-spacing: 5px;
 
-    margin-bottom: 20px;
-}
-
-.hero-text h1 {
-    font-family: var(--font-display);
-    font-size: clamp(50px, 6vw, 92px);
-
-    line-height: 0.9;
-
-    letter-spacing: -4px;
-
-    margin-bottom: 25px;
-}
-
-.hero-text h1 span {
-    display: block;
-
-    color: var(--green);
-
-    text-shadow:
-        0 0 30px rgba(0, 255, 102, 0.12);
-}
-
-.role {
-    font-size: clamp(18px, 2vw, 27px);
-
-    letter-spacing: 4px;
-
-    color: #9ba59f;
-
-    margin-bottom: 25px;
-}
-
-.role strong {
-    color: var(--green);
-}
-
-.hero-text p {
-    max-width: 680px;
-
-    color: #78847d;
-
-    font-size: 14px;
-
-    line-height: 1.8;
-
-    margin-bottom: 35px;
-}
-
-
-/* =====================================================
-   BUTTONS
-===================================================== */
-
-.hero-buttons,
-.contact-buttons {
-    display: flex;
-
-    gap: 12px;
-
-    flex-wrap: wrap;
-}
-
-.btn {
-    display: inline-flex;
-
-    align-items: center;
-
-    gap: 10px;
-
-    padding: 15px 21px;
-
-    font-size: 10px;
-
-    letter-spacing: 2px;
-
-    border: 1px solid var(--border);
-
-    transition:
-        transform 0.3s ease,
-        box-shadow 0.3s ease,
-        background 0.3s ease;
-}
-
-.btn-primary {
-    background: var(--green);
-
-    color: #020403;
-
-    border-color: var(--green);
-
-    font-weight: bold;
-}
-
-.btn-primary:hover {
-    box-shadow:
-        0 0 30px rgba(0, 255, 102, 0.3);
-}
-
-.btn-secondary {
-    color: var(--green);
-
-    border-color: rgba(0, 255, 102, 0.4);
-}
-
-.btn-secondary:hover {
-    background: rgba(0, 255, 102, 0.05);
-
-    box-shadow:
-        0 0 25px rgba(0, 255, 102, 0.08);
-}
-
-.btn-ghost {
-    color: #89938d;
-}
-
-
-/* =====================================================
-   TELEMETRY
-===================================================== */
-
-.hero-telemetry {
-    position: absolute;
-
-    bottom: 25px;
-
-    left: 8%;
-    right: 8%;
-
-    display: grid;
-
-    grid-template-columns: repeat(4, 1fr);
-
-    border-top: 1px solid var(--border);
-
-    padding-top: 15px;
-}
-
-.telemetry-item {
-    display: flex;
-
-    justify-content: space-between;
-
-    padding-right: 30px;
-
-    color: var(--muted);
-
-    font-size: 9px;
-
-    letter-spacing: 2px;
-
-    border-right: 1px solid var(--border);
-}
-
-.telemetry-item:not(:first-child) {
-    padding-left: 25px;
-}
-
-.telemetry-item:last-child {
-    border-right: 0;
-}
-
-.telemetry-item strong {
-    color: #aab3ae;
-
-    font-weight: normal;
-}
-
-.scroll-indicator {
-    position: absolute;
-
-    right: 5%;
-
-    bottom: 110px;
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-
-    gap: 10px;
-
-    color: var(--muted);
-
-    font-size: 8px;
-
-    letter-spacing: 3px;
-
-    writing-mode: vertical-rl;
-}
-
-.scroll-arrow {
-    color: var(--green);
-
-    font-size: 18px;
-
-    animation: scrollBounce 1.5s infinite;
-}
-
-@keyframes scrollBounce {
-
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(8px);
-    }
-}
-
-
-/* =====================================================
-   SECTIONS
-===================================================== */
-
-.section {
-    position: relative;
-
-    min-height: 80vh;
-
-    padding: 130px 8%;
-
-    border-top: 1px solid var(--border);
-
-    overflow: hidden;
-}
-
-.section-header {
-    display: flex;
-
-    gap: 30px;
-
-    align-items: flex-start;
-
-    margin-bottom: 70px;
-}
-
-.section-number {
-    color: var(--green);
-
-    font-size: 11px;
-
-    letter-spacing: 3px;
-}
-
-.section-label {
-    color: var(--cyan);
-
-    font-size: 9px;
-
-    letter-spacing: 5px;
-
-    margin-bottom: 18px;
-}
-
-.section h2 {
-    font-family: Arial, sans-serif;
-
-    font-size: clamp(50px, 7vw, 95px);
-
-    line-height: 0.85;
-
-    letter-spacing: -5px;
-}
-
-.section h2 span {
-    display: block;
-
-    color: transparent;
-
-    -webkit-text-stroke: 1px #647069;
-}
-
-
-/* =====================================================
-   ABOUT
-===================================================== */
-
-.about-grid {
-    display: grid;
-
-    grid-template-columns: 1.3fr 1fr;
-
-    gap: 60px;
-
-    max-width: 1200px;
-}
-
-.terminal-window {
-    border: 1px solid var(--border);
-
-    background: rgba(0, 255, 102, 0.015);
-}
-
-.terminal-header {
-    padding: 13px 18px;
-
-    display: flex;
-
-    justify-content: space-between;
-
-    border-bottom: 1px solid var(--border);
-
-    color: var(--muted);
-
-    font-size: 10px;
-}
-
-.terminal-header i {
-    display: inline-block;
-
-    width: 6px;
-    height: 6px;
-
-    border-radius: 50%;
-
-    background: var(--muted);
-
-    margin-left: 6px;
-}
-
-.terminal-body {
-    padding: 30px;
-
-    color: #8b9790;
-
-    font-size: 12px;
-
-    line-height: 2;
-}
-
-.terminal-body .output {
-    color: #5e6b64;
-
-    margin-bottom: 15px;
-
-    padding-left: 18px;
-}
-
-.stats-panel {
-    display: grid;
-
-    grid-template-columns: 1fr 1fr;
-
-    gap: 12px;
-}
-
-.stat-card {
-    min-height: 160px;
-
-    padding: 22px;
-
-    border: 1px solid var(--border);
-
-    background: rgba(0, 255, 102, 0.015);
-
-    display: flex;
-
-    flex-direction: column;
-
-    justify-content: space-between;
-
-    transition:
-        border-color 0.3s,
-        transform 0.3s;
-}
-
-.stat-card:hover {
-    border-color: rgba(0, 255, 102, 0.5);
-}
-
-.stat-label {
-    color: var(--muted);
-
-    font-size: 9px;
-
-    letter-spacing: 3px;
-}
-
-.stat-card strong {
-    font-size: 24px;
-
-    color: var(--green);
-}
-
-.stat-card small {
-    color: #5d6962;
-
-    font-size: 9px;
-}
-
-
-/* =====================================================
-   OPERATIONS
-===================================================== */
-
-.operations {
-    background: #030604;
-}
-
-.operations-grid {
-    display: grid;
-
-    grid-template-columns: repeat(3, 1fr);
-
-    gap: 18px;
-}
-
-.operation-card {
-    min-height: 400px;
-
-    border: 1px solid var(--border);
-
-    padding: 28px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(0, 255, 102, 0.04),
-            transparent 45%
+        cursorRing.classList.remove(
+            "click"
         );
 
-    display: flex;
 
-    flex-direction: column;
+        void cursorRing.offsetWidth;
 
-    transition:
-        transform 0.35s ease,
-        border-color 0.35s ease,
-        box-shadow 0.35s ease;
-}
 
-.operation-card:hover {
-    border-color: rgba(0, 255, 102, 0.55);
-
-    box-shadow:
-        0 20px 70px rgba(0, 0, 0, 0.5),
-        inset 0 0 40px rgba(0, 255, 102, 0.02);
-}
-
-.operation-top {
-    display: flex;
-
-    justify-content: space-between;
-
-    font-size: 9px;
-
-    letter-spacing: 2px;
-
-    color: var(--muted);
-
-    margin-bottom: 60px;
-}
-
-.operation-status {
-    color: var(--green);
-}
-
-.operation-card h3 {
-    font-family: Arial, sans-serif;
-
-    font-size: 29px;
-
-    line-height: 1;
-
-    margin-bottom: 25px;
-}
-
-.operation-card h3 span {
-    display: block;
-
-    color: var(--green);
-}
-
-.operation-card p {
-    color: #68746d;
-
-    font-size: 12px;
-
-    line-height: 1.8;
-
-    margin-bottom: 25px;
-}
-
-.tags {
-    display: flex;
-
-    flex-wrap: wrap;
-
-    gap: 7px;
-
-    margin-top: auto;
-
-    margin-bottom: 25px;
-}
-
-.tags span {
-    border: 1px solid var(--border);
-
-    padding: 7px;
-
-    color: #6d7972;
-
-    font-size: 8px;
-
-    letter-spacing: 1px;
-}
-
-.operation-footer {
-    border-top: 1px solid var(--border);
-
-    padding-top: 18px;
-
-    display: flex;
-
-    justify-content: space-between;
-
-    color: var(--muted);
-
-    font-size: 9px;
-
-    letter-spacing: 2px;
-}
-
-.operation-footer b {
-    color: var(--green);
-}
-
-.arrow {
-    color: var(--green);
-
-    font-size: 20px;
-}
-
-
-/* =====================================================
-   ARSENAL
-===================================================== */
-
-.arsenal-grid {
-    display: grid;
-
-    grid-template-columns: repeat(4, 1fr);
-
-    border-top: 1px solid var(--border);
-
-    border-left: 1px solid var(--border);
-}
-
-.arsenal-category {
-    min-height: 270px;
-
-    padding: 28px;
-
-    border-right: 1px solid var(--border);
-
-    border-bottom: 1px solid var(--border);
-}
-
-.category-number {
-    color: var(--green);
-
-    font-size: 10px;
-
-    margin-bottom: 30px;
-}
-
-.arsenal-category h3 {
-    font-size: 15px;
-
-    letter-spacing: 3px;
-
-    margin-bottom: 25px;
-}
-
-.tool-list {
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 8px;
-}
-
-.tool {
-    padding: 11px;
-
-    border: 1px solid var(--border);
-
-    color: #758078;
-
-    font-size: 9px;
-
-    letter-spacing: 2px;
-
-    transition:
-        color 0.25s,
-        border-color 0.25s,
-        transform 0.25s;
-}
-
-.tool:hover {
-    color: var(--green);
-
-    border-color: rgba(0, 255, 102, 0.5);
-
-    transform: translateX(6px);
-}
-
-
-/* =====================================================
-   TELEMETRY DASHBOARD
-===================================================== */
-
-.telemetry-dashboard {
-    margin-top: 60px;
-
-    padding: 35px;
-
-    border: 1px solid var(--border);
-
-    background: rgba(0, 255, 102, 0.015);
-}
-
-.telemetry-title {
-    color: var(--green);
-
-    font-size: 10px;
-
-    letter-spacing: 4px;
-
-    margin-bottom: 35px;
-}
-
-.telemetry-bars {
-    display: grid;
-
-    grid-template-columns: 1fr 1fr;
-
-    gap: 25px 50px;
-}
-
-.telemetry-bar > div:first-child {
-    display: flex;
-
-    justify-content: space-between;
-
-    margin-bottom: 8px;
-
-    color: #667169;
-
-    font-size: 9px;
-
-    letter-spacing: 2px;
-}
-
-.bar {
-    height: 3px;
-
-    background: #101b14;
-}
-
-.bar div {
-    width: var(--width);
-
-    height: 100%;
-
-    background: var(--green);
-
-    box-shadow:
-        0 0 12px rgba(0, 255, 102, 0.6);
-
-    animation: barGlow 2s infinite alternate;
-}
-
-@keyframes barGlow {
-
-    from {
-        opacity: 0.6;
-    }
-
-    to {
-        opacity: 1;
-    }
-}
-
-
-/* =====================================================
-   CONTACT
-===================================================== */
-
-.contact {
-    min-height: 70vh;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    text-align: center;
-}
-
-.contact-box {
-    width: min(900px, 100%);
-
-    padding: 80px 40px;
-
-    border: 1px solid var(--border);
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(0, 255, 102, 0.04),
-            transparent 60%
+        cursorRing.classList.add(
+            "click"
         );
-}
 
-.contact-box .section-label {
-    margin-bottom: 25px;
-}
+    }
+);
 
-.contact-box h2 {
-    margin-bottom: 30px;
-}
 
-.contact-box p {
-    max-width: 600px;
+document.addEventListener(
+    "mouseup",
+    () => {
 
-    margin: 0 auto 35px;
+        setTimeout(() => {
 
-    color: #69756e;
+            if (cursorRing) {
 
-    font-size: 13px;
+                cursorRing.classList.remove(
+                    "click"
+                );
 
-    line-height: 1.8;
-}
+            }
 
-.contact-buttons {
-    justify-content: center;
-}
+        }, 350);
 
-.connection-status {
-    margin-top: 35px;
+    }
+);
 
-    color: var(--green);
-
-    font-size: 9px;
-
-    letter-spacing: 3px;
-}
 
 
 /* =====================================================
-   FOOTER
+   MAGNETIC BUTTONS
 ===================================================== */
 
-footer {
-    padding: 30px 8%;
+const magneticElements =
+    document.querySelectorAll(
+        ".magnetic"
+    );
 
-    border-top: 1px solid var(--border);
 
-    display: flex;
+magneticElements.forEach(
+    (element) => {
 
-    justify-content: space-between;
+        element.addEventListener(
+            "mousemove",
+            (event) => {
 
-    color: var(--muted);
+                const rect =
+                    element.getBoundingClientRect();
 
-    font-size: 9px;
 
-    letter-spacing: 2px;
-}
+                const x =
+                    event.clientX -
+                    (
+                        rect.left +
+                        rect.width / 2
+                    );
+
+
+                const y =
+                    event.clientY -
+                    (
+                        rect.top +
+                        rect.height / 2
+                    );
+
+
+                element.style.transform =
+                    `translate(
+                        ${x * 0.12}px,
+                        ${y * 0.12}px
+                    )`;
+
+            }
+        );
+
+
+        element.addEventListener(
+            "mouseleave",
+            () => {
+
+                element.style.transform =
+                    "translate(0, 0)";
+
+            }
+        );
+
+    }
+);
+
 
 
 /* =====================================================
-   MAGNETIC HOVER
+   ACTIVE NAVIGATION
 ===================================================== */
 
-.magnetic {
-    transition:
-        transform 0.2s ease;
-}
+const sections =
+    document.querySelectorAll(
+        "section[id]"
+    );
+
+
+const navLinks =
+    document.querySelectorAll(
+        ".nav-link"
+    );
+
+
+window.addEventListener(
+    "scroll",
+    () => {
+
+        let current = "";
+
+
+        sections.forEach(
+            (section) => {
+
+                const sectionTop =
+                    section.offsetTop - 150;
+
+
+                if (
+                    window.scrollY >=
+                    sectionTop
+                ) {
+
+                    current =
+                        section.getAttribute(
+                            "id"
+                        );
+
+                }
+
+            }
+        );
+
+
+        navLinks.forEach(
+            (link) => {
+
+                link.classList.remove(
+                    "active"
+                );
+
+
+                if (
+                    link.getAttribute("href") ===
+                    "#" + current
+                ) {
+
+                    link.classList.add(
+                        "active"
+                    );
+
+                }
+
+            }
+        );
+
+    }
+);
+
 
 
 /* =====================================================
-   MOBILE
+   INTERSECTION OBSERVER
 ===================================================== */
 
-@media (max-width: 1000px) {
+const animatedElements =
+    document.querySelectorAll(
+        ".operation-card, .stat-card, .arsenal-category"
+    );
 
-    .navbar nav {
-        gap: 14px;
+
+const observer =
+    new IntersectionObserver(
+        (entries) => {
+
+            entries.forEach(
+                (entry) => {
+
+                    if (
+                        entry.isIntersecting
+                    ) {
+
+                        entry.target.style.opacity =
+                            "1";
+
+
+                        entry.target.style.transform =
+                            "translateY(0)";
+
+                    }
+
+                }
+            );
+
+        },
+        {
+            threshold: 0.15
+        }
+    );
+
+
+animatedElements.forEach(
+    (element) => {
+
+        element.style.opacity =
+            "0";
+
+
+        element.style.transform =
+            "translateY(25px)";
+
+
+        element.style.transition =
+            "opacity 0.7s ease, transform 0.7s ease";
+
+
+        observer.observe(element);
+
     }
+);
 
-    .nav-link span {
-        display: none;
-    }
 
-    .hero-layout {
-        grid-template-columns: 230px 1fr;
 
-        gap: 50px;
-    }
+/* =====================================================
+   CONSOLE EASTER EGG
+===================================================== */
 
-    .profile-frame {
-        width: 220px;
-        height: 220px;
-    }
+console.log(
+    "%c SMIT // SECURITY OPERATIONS ",
+    "background:#00ff66;color:#020403;font-size:16px;padding:8px;"
+);
 
-    .operations-grid {
-        grid-template-columns: 1fr;
-    }
 
-    .arsenal-grid {
-        grid-template-columns: 1fr 1fr;
-    }
+console.log(
+    "%c System initialized successfully.",
+    "color:#00ff66;font-size:12px;"
+);
+
+
+console.log(
+    "%c If you're reading this, you probably like looking under the hood.",
+    "color:#718079;font-size:12px;"
+);
+
+
+
+/* =====================================================
+   LIVE DASHBOARD // MOUSE PARALLAX
+===================================================== */
+
+const hero =
+    document.querySelector(".hero");
+
+
+const securityPanel =
+    document.querySelector(".security-panel");
+
+
+const heroContent =
+    document.querySelector(".hero-content");
+
+
+if (hero) {
+
+    hero.addEventListener(
+        "mousemove",
+        (event) => {
+
+            const rect =
+                hero.getBoundingClientRect();
+
+
+            const x =
+                (
+                    event.clientX -
+                    rect.left
+                ) /
+                rect.width -
+                0.5;
+
+
+            const y =
+                (
+                    event.clientY -
+                    rect.top
+                ) /
+                rect.height -
+                0.5;
+
+
+
+            /* Security panel */
+
+            if (securityPanel) {
+
+                securityPanel.style.transform =
+                    `perspective(900px)
+                     rotateY(${x * 5}deg)
+                     rotateX(${y * -5}deg)
+                     translate(
+                        ${x * 10}px,
+                        ${y * 10}px
+                     )`;
+
+            }
+
+
+
+            /* Hero content */
+
+            if (heroContent) {
+
+                heroContent.style.transform =
+                    `translate(
+                        ${x * -5}px,
+                        ${y * -5}px
+                    )`;
+
+            }
+
+        }
+    );
+
+
+
+    hero.addEventListener(
+        "mouseleave",
+        () => {
+
+            if (securityPanel) {
+
+                securityPanel.style.transform =
+                    "perspective(900px) rotateY(0deg) rotateX(0deg) translate(0, 0)";
+
+            }
+
+
+            if (heroContent) {
+
+                heroContent.style.transform =
+                    "translate(0, 0)";
+
+            }
+
+        }
+    );
 
 }
 
 
-@media (max-width: 750px) {
-
-    body {
-        cursor: auto;
-    }
-
-    .cursor-dot,
-    .cursor-ring,
-    .cursor-trail {
-        display: none;
-    }
-
-    .navbar {
-        padding: 0 20px;
-    }
-
-    .navbar nav {
-        display: none;
-    }
-
-    .system-status {
-        font-size: 9px;
-    }
-
-    .hero {
-        padding: 120px 25px 120px;
-    }
-
-    .hero-layout {
-        grid-template-columns: 1fr;
-
-        text-align: center;
-    }
-
-    .profile-area {
-        order: 1;
-    }
-
-    .hero-text {
-        order: 2;
-    }
-
-    .terminal-intro {
-        text-align: center;
-    }
-
-    .classification {
-        letter-spacing: 3px;
-    }
-
-    .hero-text h1 {
-        font-size: clamp(45px, 13vw, 70px);
-
-        letter-spacing: -3px;
-    }
-
-    .hero-buttons {
-        justify-content: center;
-    }
-
-    .hero-telemetry {
-        left: 25px;
-        right: 25px;
-
-        grid-template-columns: 1fr 1fr;
-
-        gap: 15px;
-    }
-
-    .telemetry-item {
-        padding: 0;
-
-        border-right: 0;
-    }
-
-    .telemetry-item:not(:first-child) {
-        padding-left: 0;
-    }
-
-    .scroll-indicator {
-        display: none;
-    }
-
-    .section {
-        padding: 90px 25px;
-    }
-
-    .section-header {
-        gap: 15px;
-    }
-
-    .section h2 {
-        font-size: clamp(45px, 13vw, 70px);
-    }
-
-    .about-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .stats-panel {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .arsenal-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .telemetry-bars {
-        grid-template-columns: 1fr;
-    }
-
-    footer {
-        flex-direction: column;
-
-        gap: 12px;
-
-        text-align: center;
-    }
-
-    .boot-center h1 {
-        font-size: 55px;
-
-        letter-spacing: -3px;
-    }
-
-    .boot-top,
-    .boot-footer {
-        font-size: 8px;
-
-        letter-spacing: 2px;
-    }
-
-}
-
-
-@media (max-width: 450px) {
-
-    .profile-frame {
-        width: 190px;
-        height: 190px;
-    }
-
-    .profile-initial {
-        font-size: 90px;
-    }
-
-    .online-badge {
-        right: -15px;
-    }
-
-    .stats-panel {
-        grid-template-columns: 1fr;
-    }
-
-    .hero-buttons {
-        flex-direction: column;
-    }
-
-    .btn {
-        justify-content: center;
-    }
-
-}
-.profile-photo {
-    width: 100%;
-    height: 100%;
-
-    object-fit: cover;
-    object-position: center;
-
-    display: block;
-
-    filter:
-        contrast(1.05)
-        saturate(0.92);
-
-    transition:
-        transform 0.4s ease,
-        filter 0.4s ease;
-}
-
-.profile-frame:hover .profile-photo {
-    transform: scale(1.035);
-
-    filter:
-        contrast(1.08)
-        saturate(1);
-}
-
-/* =========================================
-   ADVANCED CURSOR INTERACTION
-========================================= */
-
-.cursor-dot,
-.cursor-ring,
-.trail-1,
-.trail-2,
-.trail-3 {
-    pointer-events: none;
-    will-change: transform, left, top;
-}
-
-
-/* Cursor becomes larger over interactive elements */
-
-body.cursor-active .cursor-ring {
-    width: 52px;
-    height: 52px;
-
-    border-color: var(--green);
-
-    box-shadow:
-        0 0 10px rgba(0, 255, 102, 0.4),
-        0 0 30px rgba(0, 255, 102, 0.15);
-
-    transition:
-        width 0.2s ease,
-        height 0.2s ease,
-        border-color 0.2s ease;
-}
-
-
-/* Cursor dot reacts */
-
-body.cursor-active .cursor-dot {
-    transform: translate(-50%, -50%) scale(1.5);
-
-    box-shadow:
-        0 0 12px var(--green),
-        0 0 25px rgba(0, 255, 102, 0.5);
-}
-
-
-/* Click pulse */
-
-.cursor-ring.click {
-    animation: cursorPulse 0.35s ease-out;
-}
-
-@keyframes cursorPulse {
-
-    0% {
-        width: 32px;
-        height: 32px;
-        opacity: 1;
-    }
-
-    50% {
-        width: 75px;
-        height: 75px;
-        opacity: 0.7;
-    }
-
-    100% {
-        width: 45px;
-        height: 45px;
-        opacity: 0;
-    }
-
-}
-
-
-/* Subtle trail glow */
-
-.trail-1,
-.trail-2,
-.trail-3 {
-    filter:
-        drop-shadow(0 0 6px rgba(0, 255, 102, 0.6));
-}
-
-
-/* =========================================
-   DISABLE CUSTOM CURSOR ON TOUCH DEVICES
-========================================= */
-
-@media (hover: none), (pointer: coarse) {
-
-    body {
-        cursor: auto;
-    }
-
-    .cursor-dot,
-    .cursor-ring,
-    .trail-1,
-    .trail-2,
-    .trail-3 {
-        display: none;
-    }
-
-}
-
-/* =========================================
-   LIVE DASHBOARD PARALLAX
-========================================= */
-
-.security-panel {
-    transition:
-        transform 0.15s ease-out,
-        box-shadow 0.3s ease;
-
-    transform-style: preserve-3d;
-}
-
-.hero-content {
-    transition:
-        transform 0.2s ease-out;
-}
-
-/* =========================================
-   LIVE CYBER NETWORK
-========================================= */
-
-#security-network {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 1;
-    opacity: 0.75;
-}
-
-.network-status {
-    position: absolute;
-    top: 24px;
-    right: 28px;
-    z-index: 5;
-
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    font-family: monospace;
-    font-size: 10px;
-    letter-spacing: 2px;
-
-    color: rgba(255, 255, 255, 0.65);
-
-    padding: 9px 13px;
-
-    border: 1px solid rgba(0, 255, 102, 0.18);
-    background: rgba(0, 0, 0, 0.35);
-
-    backdrop-filter: blur(8px);
-}
-
-.network-dot {
-    width: 6px;
-    height: 6px;
-
-    border-radius: 50%;
-
-    background: var(--green);
-
-    box-shadow:
-        0 0 6px var(--green),
-        0 0 14px rgba(0, 255, 102, 0.5);
-
-    animation: networkPulse 1.8s infinite;
-}
-
-.network-active {
-    color: var(--green);
-    margin-left: 5px;
-}
-
-@keyframes networkPulse {
-
-    0%,
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-
-    50% {
-        opacity: 0.35;
-        transform: scale(0.7);
-    }
-}
-
-@media (max-width: 768px) {
-
-    .network-status {
-        top: 15px;
-        right: 15px;
-        font-size: 8px;
-        padding: 7px 9px;
-    }
-
-    #security-network {
-        opacity: 0.5;
-    }
-}
 
 /* =====================================================
    LIVE CYBER NETWORK
+   HERO BACKGROUND
 ===================================================== */
 
-const networkCanvas = document.getElementById("security-network");
-const networkHero = document.querySelector(".hero");
+const networkCanvas =
+    document.getElementById(
+        "security-network"
+    );
 
-if (networkCanvas && networkHero) {
 
-    const networkCtx = networkCanvas.getContext("2d");
+const networkHero =
+    document.querySelector(
+        ".hero"
+    );
 
-    let networkNodes = [];
-    let networkWidth = 0;
-    let networkHeight = 0;
+
+if (
+    networkCanvas &&
+    networkHero
+) {
+
+    const ctx =
+        networkCanvas.getContext(
+            "2d"
+        );
+
+
+    let nodes = [];
+
+
+    let width = 0;
+
+    let height = 0;
+
+
+
+    /* =================================================
+       MOUSE
+    ================================================= */
 
     const networkMouse = {
+
         x: -1000,
+
         y: -1000
+
     };
 
 
-    function createNetwork() {
 
-        networkNodes = [];
+    /* =================================================
+       CREATE NODES
+    ================================================= */
 
-        const mobile = window.innerWidth <= 768;
-        const nodeCount = mobile ? 24 : 48;
+    function createNodes() {
 
-        for (let i = 0; i < nodeCount; i++) {
+        nodes = [];
 
-            networkNodes.push({
 
-                x: Math.random() * networkWidth,
-                y: Math.random() * networkHeight,
+        const isMobile =
+            window.innerWidth <= 768;
 
-                vx: (Math.random() - 0.5) * 0.25,
-                vy: (Math.random() - 0.5) * 0.25,
 
-                radius: Math.random() * 1.8 + 0.8
+        const count =
+            isMobile ? 22 : 55;
+
+
+        for (
+            let i = 0;
+            i < count;
+            i++
+        ) {
+
+            nodes.push({
+
+                x:
+                    Math.random() *
+                    width,
+
+                y:
+                    Math.random() *
+                    height,
+
+
+                vx:
+                    (
+                        Math.random() -
+                        0.5
+                    ) * 0.35,
+
+
+                vy:
+                    (
+                        Math.random() -
+                        0.5
+                    ) * 0.35,
+
+
+                radius:
+                    Math.random() *
+                    1.5 +
+                    0.8
+
             });
+
         }
+
     }
 
+
+
+    /* =================================================
+       RESIZE
+    ================================================= */
 
     function resizeNetwork() {
-
-        const rect = networkHero.getBoundingClientRect();
-
-        networkWidth = rect.width;
-        networkHeight = rect.height;
-
-        const pixelRatio =
-            Math.min(window.devicePixelRatio || 1, 2);
-
-        networkCanvas.width =
-            networkWidth * pixelRatio;
-
-        networkCanvas.height =
-            networkHeight * pixelRatio;
-
-        networkCanvas.style.width =
-            networkWidth + "px";
-
-        networkCanvas.style.height =
-            networkHeight + "px";
-
-        networkCtx.setTransform(
-            pixelRatio,
-            0,
-            0,
-            pixelRatio,
-            0,
-            0
-        );
-
-        createNetwork();
-    }
-
-
-    networkHero.addEventListener("mousemove", (event) => {
 
         const rect =
             networkHero.getBoundingClientRect();
 
-        networkMouse.x =
-            event.clientX - rect.left;
 
-        networkMouse.y =
-            event.clientY - rect.top;
-    });
+        width =
+            rect.width;
 
 
-    networkHero.addEventListener("mouseleave", () => {
-
-        networkMouse.x = -1000;
-        networkMouse.y = -1000;
-    });
+        height =
+            rect.height;
 
 
-    function drawNetwork() {
+        const dpr =
+            Math.min(
+                window.devicePixelRatio || 1,
+                2
+            );
 
-        networkCtx.clearRect(
+
+        networkCanvas.width =
+            width * dpr;
+
+
+        networkCanvas.height =
+            height * dpr;
+
+
+        networkCanvas.style.width =
+            width + "px";
+
+
+        networkCanvas.style.height =
+            height + "px";
+
+
+        ctx.setTransform(
+            dpr,
             0,
             0,
-            networkWidth,
-            networkHeight
+            dpr,
+            0,
+            0
         );
 
 
-        /* MOVE NODES */
+        createNodes();
 
-        networkNodes.forEach(node => {
-
-            node.x += node.vx;
-            node.y += node.vy;
+    }
 
 
-            if (node.x < 0 || node.x > networkWidth) {
-                node.vx *= -1;
+
+    /* =================================================
+       MOUSE TRACKING
+    ================================================= */
+
+    networkHero.addEventListener(
+        "mousemove",
+        (event) => {
+
+            const rect =
+                networkHero.getBoundingClientRect();
+
+
+            networkMouse.x =
+                event.clientX -
+                rect.left;
+
+
+            networkMouse.y =
+                event.clientY -
+                rect.top;
+
+        }
+    );
+
+
+    networkHero.addEventListener(
+        "mouseleave",
+        () => {
+
+            networkMouse.x =
+                -1000;
+
+
+            networkMouse.y =
+                -1000;
+
+        }
+    );
+
+
+
+    /* =================================================
+       DRAW NETWORK
+    ================================================= */
+
+    function drawNetwork() {
+
+        ctx.clearRect(
+            0,
+            0,
+            width,
+            height
+        );
+
+
+
+        /* ---------------------------------------------
+           MOVE NODES
+        --------------------------------------------- */
+
+        nodes.forEach(
+            (node) => {
+
+                node.x += node.vx;
+
+                node.y += node.vy;
+
+
+
+                /* Bounce horizontally */
+
+                if (
+                    node.x <= 0 ||
+                    node.x >= width
+                ) {
+
+                    node.vx *= -1;
+
+                }
+
+
+
+                /* Bounce vertically */
+
+                if (
+                    node.y <= 0 ||
+                    node.y >= height
+                ) {
+
+                    node.vy *= -1;
+
+                }
+
+
+
+                /* -------------------------------------
+                   MOUSE INTERACTION
+                ------------------------------------- */
+
+                const dx =
+                    node.x -
+                    networkMouse.x;
+
+
+                const dy =
+                    node.y -
+                    networkMouse.y;
+
+
+                const distance =
+                    Math.sqrt(
+                        dx * dx +
+                        dy * dy
+                    );
+
+
+                if (
+                    distance < 160
+                ) {
+
+                    const force =
+                        (
+                            160 -
+                            distance
+                        ) / 160;
+
+
+                    node.x +=
+                        (
+                            dx /
+                            (
+                                distance ||
+                                1
+                            )
+                        ) *
+                        force *
+                        0.8;
+
+
+                    node.y +=
+                        (
+                            dy /
+                            (
+                                distance ||
+                                1
+                            )
+                        ) *
+                        force *
+                        0.8;
+
+                }
+
             }
-
-            if (node.y < 0 || node.y > networkHeight) {
-                node.vy *= -1;
-            }
+        );
 
 
-            /* MOUSE INTERACTION */
 
-            const dx =
-                node.x - networkMouse.x;
+        /* ---------------------------------------------
+           CONNECTIONS
+        --------------------------------------------- */
 
-            const dy =
-                node.y - networkMouse.y;
-
-            const distance =
-                Math.sqrt(dx * dx + dy * dy);
-
-
-            if (distance < 130) {
-
-                const force =
-                    (130 - distance) / 130;
-
-                node.x +=
-                    (dx / (distance || 1)) *
-                    force *
-                    0.8;
-
-                node.y +=
-                    (dy / (distance || 1)) *
-                    force *
-                    0.8;
-            }
-        });
-
-
-        /* CONNECTIONS */
-
-        for (let i = 0; i < networkNodes.length; i++) {
+        for (
+            let i = 0;
+            i < nodes.length;
+            i++
+        ) {
 
             for (
                 let j = i + 1;
-                j < networkNodes.length;
+                j < nodes.length;
                 j++
             ) {
 
-                const a = networkNodes[i];
-                const b = networkNodes[j];
+                const a =
+                    nodes[i];
 
-                const dx = a.x - b.x;
-                const dy = a.y - b.y;
+
+                const b =
+                    nodes[j];
+
+
+                const dx =
+                    a.x -
+                    b.x;
+
+
+                const dy =
+                    a.y -
+                    b.y;
+
 
                 const distance =
-                    Math.sqrt(dx * dx + dy * dy);
+                    Math.sqrt(
+                        dx * dx +
+                        dy * dy
+                    );
 
 
-                if (distance < 145) {
+                if (
+                    distance < 165
+                ) {
 
                     const opacity =
-                        1 - distance / 145;
+                        (
+                            1 -
+                            distance / 165
+                        ) *
+                        0.32;
 
-                    networkCtx.beginPath();
 
-                    networkCtx.moveTo(
+                    ctx.beginPath();
+
+
+                    ctx.moveTo(
                         a.x,
                         a.y
                     );
 
-                    networkCtx.lineTo(
+
+                    ctx.lineTo(
                         b.x,
                         b.y
                     );
 
-                    networkCtx.strokeStyle =
-                        `rgba(0, 255, 102, ${opacity * 0.22})`;
 
-                    networkCtx.lineWidth = 0.7;
+                    ctx.strokeStyle =
+                        `rgba(
+                            0,
+                            255,
+                            102,
+                            ${opacity}
+                        )`;
 
-                    networkCtx.stroke();
+
+                    ctx.lineWidth =
+                        0.7;
+
+
+                    ctx.stroke();
+
                 }
+
             }
+
         }
 
 
-        /* MOUSE CONNECTIONS */
 
-        networkNodes.forEach(node => {
+        /* ---------------------------------------------
+           MOUSE CONNECTIONS
+        --------------------------------------------- */
 
-            const dx =
-                node.x - networkMouse.x;
+        nodes.forEach(
+            (node) => {
 
-            const dy =
-                node.y - networkMouse.y;
-
-            const distance =
-                Math.sqrt(dx * dx + dy * dy);
+                const dx =
+                    node.x -
+                    networkMouse.x;
 
 
-            if (distance < 190) {
+                const dy =
+                    node.y -
+                    networkMouse.y;
 
-                const opacity =
-                    1 - distance / 190;
 
-                networkCtx.beginPath();
+                const distance =
+                    Math.sqrt(
+                        dx * dx +
+                        dy * dy
+                    );
 
-                networkCtx.moveTo(
-                    node.x,
-                    node.y
-                );
 
-                networkCtx.lineTo(
-                    networkMouse.x,
-                    networkMouse.y
-                );
+                if (
+                    distance < 190
+                ) {
 
-                networkCtx.strokeStyle =
-                    `rgba(0, 255, 102, ${opacity * 0.45})`;
+                    const opacity =
+                        (
+                            1 -
+                            distance / 190
+                        ) *
+                        0.65;
 
-                networkCtx.lineWidth = 1;
 
-                networkCtx.stroke();
+                    ctx.beginPath();
+
+
+                    ctx.moveTo(
+                        node.x,
+                        node.y
+                    );
+
+
+                    ctx.lineTo(
+                        networkMouse.x,
+                        networkMouse.y
+                    );
+
+
+                    ctx.strokeStyle =
+                        `rgba(
+                            0,
+                            255,
+                            102,
+                            ${opacity}
+                        )`;
+
+
+                    ctx.lineWidth =
+                        1;
+
+
+                    ctx.stroke();
+
+                }
+
             }
-        });
+        );
 
 
-        /* NODES */
 
-        networkNodes.forEach(node => {
+        /* ---------------------------------------------
+           DRAW NODES
+        --------------------------------------------- */
 
-            networkCtx.beginPath();
+        nodes.forEach(
+            (node) => {
 
-            networkCtx.arc(
-                node.x,
-                node.y,
-                node.radius,
-                0,
-                Math.PI * 2
-            );
-
-            networkCtx.fillStyle =
-                "rgba(0, 255, 102, 0.75)";
-
-            networkCtx.shadowBlur = 8;
-
-            networkCtx.shadowColor =
-                "rgba(0, 255, 102, 0.6)";
-
-            networkCtx.fill();
-
-            networkCtx.shadowBlur = 0;
-        });
+                ctx.beginPath();
 
 
-        requestAnimationFrame(drawNetwork);
+                ctx.arc(
+                    node.x,
+                    node.y,
+                    node.radius,
+                    0,
+                    Math.PI * 2
+                );
+
+
+                ctx.fillStyle =
+                    "rgba(0, 255, 102, 0.85)";
+
+
+                ctx.shadowBlur =
+                    8;
+
+
+                ctx.shadowColor =
+                    "rgba(0, 255, 102, 0.8)";
+
+
+                ctx.fill();
+
+
+                ctx.shadowBlur =
+                    0;
+
+            }
+        );
+
+
+
+        /* ---------------------------------------------
+           CONTINUE ANIMATION
+        --------------------------------------------- */
+
+        requestAnimationFrame(
+            drawNetwork
+        );
+
     }
 
+
+
+    /* =================================================
+       START NETWORK
+    ================================================= */
 
     window.addEventListener(
         "resize",
@@ -2309,68 +1373,18 @@ if (networkCanvas && networkHero) {
 
     resizeNetwork();
 
+
     drawNetwork();
+
 }
 
-/* =========================================
-   LIVE NETWORK // FINAL LAYER FIX
-========================================= */
 
-.hero {
-    position: relative;
-}
 
-.grid-background {
-    z-index: 0;
-}
+/* =====================================================
+   SYSTEM READY
+===================================================== */
 
-#security-network {
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-
-    width: 100% !important;
-    height: 100% !important;
-
-    display: block !important;
-
-    z-index: 10 !important;
-
-    pointer-events: none !important;
-
-    opacity: 1 !important;
-
-    visibility: visible !important;
-}
-           
-           .network-status {
-    position: absolute !important;
-    top: 24px !important;
-    right: 28px !important;
-
-    z-index: 20 !important;
-
-    display: flex !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-}
-
-.hero-content {
-    position: relative;
-    z-index: 3;
-}
-
-.hero-telemetry {
-    z-index: 3;
-}
-
-.scroll-indicator {
-    z-index: 3;
-}
-
-.network-status {
-    position: absolute;
-    top: 24px;
-    right: 28px;
-    z-index: 4;
-}
+console.log(
+    "%c LIVE CYBER NETWORK ONLINE ",
+    "background:#00ff66;color:#020403;font-weight:bold;padding:6px;"
+);
