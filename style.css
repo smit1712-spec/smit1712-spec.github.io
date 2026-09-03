@@ -1388,3 +1388,37 @@ console.log(
     "%c LIVE CYBER NETWORK ONLINE ",
     "background:#00ff66;color:#020403;font-weight:bold;padding:6px;"
 );
+
+           /* =========================================
+   LIVE CYBER NETWORK
+========================================= */
+
+.hero {
+    position: relative;
+    overflow: hidden;
+}
+
+#security-network {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.75;
+}
+
+.hero-content,
+.security-panel,
+.hero-telemetry,
+.network-status {
+    position: relative;
+    z-index: 3;
+}
+
+.network-status {
+    position: absolute;
+    top: 24px;
+    right: 28px;
+    z-index: 5;
+}
