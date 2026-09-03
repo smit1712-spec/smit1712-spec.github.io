@@ -2023,3 +2023,291 @@ body.cursor-active .cursor-dot {
         opacity: 0.5;
     }
 }
+
+/* =====================================================
+   LIVE CYBER NETWORK
+===================================================== */
+
+const networkCanvas = document.getElementById("security-network");
+const networkHero = document.querySelector(".hero");
+
+if (networkCanvas && networkHero) {
+
+    const networkCtx = networkCanvas.getContext("2d");
+
+    let networkNodes = [];
+    let networkWidth = 0;
+    let networkHeight = 0;
+
+    const networkMouse = {
+        x: -1000,
+        y: -1000
+    };
+
+
+    function createNetwork() {
+
+        networkNodes = [];
+
+        const mobile = window.innerWidth <= 768;
+        const nodeCount = mobile ? 24 : 48;
+
+        for (let i = 0; i < nodeCount; i++) {
+
+            networkNodes.push({
+
+                x: Math.random() * networkWidth,
+                y: Math.random() * networkHeight,
+
+                vx: (Math.random() - 0.5) * 0.25,
+                vy: (Math.random() - 0.5) * 0.25,
+
+                radius: Math.random() * 1.8 + 0.8
+            });
+        }
+    }
+
+
+    function resizeNetwork() {
+
+        const rect = networkHero.getBoundingClientRect();
+
+        networkWidth = rect.width;
+        networkHeight = rect.height;
+
+        const pixelRatio =
+            Math.min(window.devicePixelRatio || 1, 2);
+
+        networkCanvas.width =
+            networkWidth * pixelRatio;
+
+        networkCanvas.height =
+            networkHeight * pixelRatio;
+
+        networkCanvas.style.width =
+            networkWidth + "px";
+
+        networkCanvas.style.height =
+            networkHeight + "px";
+
+        networkCtx.setTransform(
+            pixelRatio,
+            0,
+            0,
+            pixelRatio,
+            0,
+            0
+        );
+
+        createNetwork();
+    }
+
+
+    networkHero.addEventListener("mousemove", (event) => {
+
+        const rect =
+            networkHero.getBoundingClientRect();
+
+        networkMouse.x =
+            event.clientX - rect.left;
+
+        networkMouse.y =
+            event.clientY - rect.top;
+    });
+
+
+    networkHero.addEventListener("mouseleave", () => {
+
+        networkMouse.x = -1000;
+        networkMouse.y = -1000;
+    });
+
+
+    function drawNetwork() {
+
+        networkCtx.clearRect(
+            0,
+            0,
+            networkWidth,
+            networkHeight
+        );
+
+
+        /* MOVE NODES */
+
+        networkNodes.forEach(node => {
+
+            node.x += node.vx;
+            node.y += node.vy;
+
+
+            if (node.x < 0 || node.x > networkWidth) {
+                node.vx *= -1;
+            }
+
+            if (node.y < 0 || node.y > networkHeight) {
+                node.vy *= -1;
+            }
+
+
+            /* MOUSE INTERACTION */
+
+            const dx =
+                node.x - networkMouse.x;
+
+            const dy =
+                node.y - networkMouse.y;
+
+            const distance =
+                Math.sqrt(dx * dx + dy * dy);
+
+
+            if (distance < 130) {
+
+                const force =
+                    (130 - distance) / 130;
+
+                node.x +=
+                    (dx / (distance || 1)) *
+                    force *
+                    0.8;
+
+                node.y +=
+                    (dy / (distance || 1)) *
+                    force *
+                    0.8;
+            }
+        });
+
+
+        /* CONNECTIONS */
+
+        for (let i = 0; i < networkNodes.length; i++) {
+
+            for (
+                let j = i + 1;
+                j < networkNodes.length;
+                j++
+            ) {
+
+                const a = networkNodes[i];
+                const b = networkNodes[j];
+
+                const dx = a.x - b.x;
+                const dy = a.y - b.y;
+
+                const distance =
+                    Math.sqrt(dx * dx + dy * dy);
+
+
+                if (distance < 145) {
+
+                    const opacity =
+                        1 - distance / 145;
+
+                    networkCtx.beginPath();
+
+                    networkCtx.moveTo(
+                        a.x,
+                        a.y
+                    );
+
+                    networkCtx.lineTo(
+                        b.x,
+                        b.y
+                    );
+
+                    networkCtx.strokeStyle =
+                        `rgba(0, 255, 102, ${opacity * 0.22})`;
+
+                    networkCtx.lineWidth = 0.7;
+
+                    networkCtx.stroke();
+                }
+            }
+        }
+
+
+        /* MOUSE CONNECTIONS */
+
+        networkNodes.forEach(node => {
+
+            const dx =
+                node.x - networkMouse.x;
+
+            const dy =
+                node.y - networkMouse.y;
+
+            const distance =
+                Math.sqrt(dx * dx + dy * dy);
+
+
+            if (distance < 190) {
+
+                const opacity =
+                    1 - distance / 190;
+
+                networkCtx.beginPath();
+
+                networkCtx.moveTo(
+                    node.x,
+                    node.y
+                );
+
+                networkCtx.lineTo(
+                    networkMouse.x,
+                    networkMouse.y
+                );
+
+                networkCtx.strokeStyle =
+                    `rgba(0, 255, 102, ${opacity * 0.45})`;
+
+                networkCtx.lineWidth = 1;
+
+                networkCtx.stroke();
+            }
+        });
+
+
+        /* NODES */
+
+        networkNodes.forEach(node => {
+
+            networkCtx.beginPath();
+
+            networkCtx.arc(
+                node.x,
+                node.y,
+                node.radius,
+                0,
+                Math.PI * 2
+            );
+
+            networkCtx.fillStyle =
+                "rgba(0, 255, 102, 0.75)";
+
+            networkCtx.shadowBlur = 8;
+
+            networkCtx.shadowColor =
+                "rgba(0, 255, 102, 0.6)";
+
+            networkCtx.fill();
+
+            networkCtx.shadowBlur = 0;
+        });
+
+
+        requestAnimationFrame(drawNetwork);
+    }
+
+
+    window.addEventListener(
+        "resize",
+        resizeNetwork
+    );
+
+
+    resizeNetwork();
+
+    drawNetwork();
+}
