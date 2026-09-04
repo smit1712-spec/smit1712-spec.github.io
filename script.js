@@ -845,7 +845,58 @@ if (networkCanvas && networkHero) {
 
         });
 
+/* -------------------------------------
+   LIVE DATA PACKETS
+------------------------------------- */
 
+const packetTime = performance.now() * 0.001;
+
+for (let i = 0; i < nodes.length - 1; i += 5) {
+
+    const a = nodes[i];
+    const b = nodes[i + 1];
+
+    const dx = a.x - b.x;
+    const dy = a.y - b.y;
+
+    const distance =
+        Math.sqrt(dx * dx + dy * dy);
+
+    if (distance < 150) {
+
+        const progress =
+            (packetTime * 0.18 + i * 0.07) % 1;
+
+        const packetX =
+            a.x + (b.x - a.x) * progress;
+
+        const packetY =
+            a.y + (b.y - a.y) * progress;
+
+        ctx.beginPath();
+
+        ctx.arc(
+            packetX,
+            packetY,
+            2,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fillStyle =
+            "rgba(0, 255, 102, 1)";
+
+        ctx.shadowBlur = 12;
+
+        ctx.shadowColor =
+            "rgba(0, 255, 102, 1)";
+
+        ctx.fill();
+
+        ctx.shadowBlur = 0;
+    }
+}
+       
         /* -------------------------------------
            DRAW NODES
         ------------------------------------- */
